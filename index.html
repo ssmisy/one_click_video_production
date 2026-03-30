@@ -96,7 +96,7 @@
                                 </button>
                             </div>
                             <p class="text-[11px] text-gray-400 mt-3 leading-relaxed">
-                                一键成片：先选篮球/足球，再选单场或多段素材，从相册导入后匹配模版并生成高光剪辑。
+                                一键成片：相册选素材后直接生成；生成后进入编辑页，可再换风格、配乐或切到手动剪辑。
                             </p>
                         </section>
                     </div>
@@ -165,7 +165,7 @@
             <div class="flex items-center justify-between px-5 py-3 bg-white/95 backdrop-blur border-b border-gray-100">
                 <button onclick="closeManualEditor()" class="text-gray-700 p-2 -ml-2"><i class="fa-solid fa-chevron-left text-lg"></i></button>
                 <div class="flex-1 text-center">
-                    <h3 class="text-black font-semibold text-[17px]">手动剪辑</h3>
+                    <h3 id="manualEditorTitle" class="text-black font-semibold text-[17px]">手动剪辑</h3>
                     <p id="manualEditorSource" class="text-[11px] text-gray-400 mt-0.5">从新建项目进入</p>
                 </div>
                 <div class="w-16"></div>
@@ -202,127 +202,33 @@
         <div id="oneClickModal" class="absolute inset-0 bg-white z-50 flex flex-col opacity-0 pointer-events-none translate-y-full transition-transform duration-300">
             <div class="flex-1 flex flex-col min-h-0" id="oneClickRoot">
 
-                <!-- 1 选运动 -->
-                <div id="ocStepSport" class="oneclick-step active">
+                <!-- 1 相册：顶部运动类型 + 自由选择素材 → 一键生成 -->
+                <div id="ocStepGallery" class="oneclick-step active">
                     <div class="flex items-center justify-between px-5 py-3 bg-white/95 backdrop-blur border-b border-gray-100">
                         <button type="button" onclick="closeOneClickFlow()" class="text-gray-700 p-2 -ml-2"><i class="fa-solid fa-chevron-left text-lg"></i></button>
-                        <h3 class="text-black font-semibold text-lg">AI 一键成片</h3>
+                        <h3 class="text-black font-semibold text-base">选择素材</h3>
                         <div class="w-8"></div>
                     </div>
-                    <div class="flex-1 overflow-y-auto px-5 pb-10 no-scrollbar">
-                        <p class="text-sm text-gray-500 mb-6 text-center mt-4">请选择运动类型（MVP：篮球 / 足球）</p>
-                        <div class="grid grid-cols-2 gap-4 mb-6">
-                            <button type="button" onclick="ocSetSport('basketball')" class="oc-sport-btn bg-white border border-gray-50 shadow-[0_4px_20px_rgba(0,0,0,0.03)] rounded-2xl p-6 flex flex-col items-center justify-center active:scale-95 transition">
-                                <div class="w-[72px] h-[72px] rounded-full bg-[#FFF5F0] text-[#FF7A45] flex justify-center items-center mb-4">
-                                    <i class="fa-solid fa-basketball text-4xl"></i>
-                                </div>
-                                <h4 class="font-bold text-gray-900 text-[17px] mb-1">篮球</h4>
-                                <p class="text-[11px] text-gray-400 mt-1 text-center leading-tight">扣篮 / 三分 / 防守高光</p>
-                            </button>
-                            <button type="button" onclick="ocSetSport('football')" class="oc-sport-btn bg-white border border-gray-50 shadow-[0_4px_20px_rgba(0,0,0,0.03)] rounded-2xl p-6 flex flex-col items-center justify-center active:scale-95 transition">
-                                <div class="w-[72px] h-[72px] rounded-full bg-[#F0FDF4] text-[#4ADE80] flex justify-center items-center mb-4">
-                                    <i class="fa-solid fa-futbol text-4xl"></i>
-                                </div>
-                                <h4 class="font-bold text-gray-900 text-[17px] mb-1">足球</h4>
-                                <p class="text-[11px] text-gray-400 mt-1 text-center leading-tight">射门 / 进球 / 扑救</p>
-                            </button>
+                    <div class="px-5 pt-3 pb-2 space-y-3">
+                        <div class="flex rounded-2xl bg-gray-100 p-[3px]">
+                            <button type="button" id="ocSportBb" onclick="ocSetSport('basketball')" class="flex-1 py-2 rounded-xl text-[13px] font-bold transition bg-white text-gray-900 shadow-sm">篮球</button>
+                            <button type="button" id="ocSportFb" onclick="ocSetSport('football')" class="flex-1 py-2 rounded-xl text-[13px] font-bold transition text-gray-500">足球</button>
                         </div>
-                        <p class="text-[11px] text-gray-400 text-center">后续可在服务端配置更多运动与模版。</p>
+                        <p id="ocGalleryHint" class="text-[11px] text-gray-400 leading-relaxed">从相册自由选择一条或多条视频，系统将按默认智能成片算法直接生成（无需提前选模版）。</p>
                     </div>
-                </div>
-
-                <!-- 2 单场 / 多段 -->
-                <div id="ocStepMode" class="oneclick-step">
-                    <div class="flex items-center justify-between px-5 py-3 bg-white/95 backdrop-blur border-b border-gray-100">
-                        <button type="button" onclick="ocBackFromMode()" class="text-gray-700 p-2 -ml-2"><i class="fa-solid fa-chevron-left text-lg"></i></button>
-                        <h3 class="text-black font-semibold text-base">素材范围</h3>
-                        <div class="w-8"></div>
-                    </div>
-                    <div class="flex-1 overflow-y-auto px-5 pb-10 no-scrollbar">
-                        <p class="text-sm text-gray-600 mt-4 mb-4">你更希望怎样导入？</p>
-                        <div class="space-y-3">
-                            <button type="button" onclick="ocSetVideoMode('single')" class="w-full text-left bg-white border border-gray-100 rounded-2xl p-4 shadow-sm active:scale-[0.99] transition">
-                                <p class="text-[15px] font-extrabold text-gray-900">单场比赛 / 单条录像</p>
-                                <p class="text-[12px] text-gray-400 mt-1">从一条长视频里自动截取高光并成片。</p>
-                            </button>
-                            <button type="button" onclick="ocSetVideoMode('multi')" class="w-full text-left bg-white border border-gray-100 rounded-2xl p-4 shadow-sm active:scale-[0.99] transition">
-                                <p class="text-[15px] font-extrabold text-gray-900">多段素材合并</p>
-                                <p class="text-[12px] text-gray-400 mt-1">从相册多选几段视频，拼成一条高光集锦。</p>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 3 相册（仅本地） -->
-                <div id="ocStepGallery" class="oneclick-step">
-                    <div class="flex items-center justify-between px-5 py-3 bg-white/95 backdrop-blur border-b border-gray-100">
-                        <button type="button" onclick="ocBackFromGallery()" class="text-gray-700 p-2 -ml-2"><i class="fa-solid fa-chevron-left text-lg"></i></button>
-                        <h3 class="text-black font-semibold text-base">从相册导入</h3>
-                        <div class="w-8"></div>
-                    </div>
-                    <div class="px-5 pt-3 pb-2">
-                        <p id="ocGalleryHint" class="text-[11px] text-gray-400 leading-relaxed"></p>
-                    </div>
-                    <div id="ocVideoList" class="flex-col gap-3 overflow-y-auto flex-1 no-scrollbar px-5 pb-28"></div>
-                    <div class="absolute bottom-0 left-0 w-full bg-white p-5 border-t border-gray-100 flex gap-3 z-10 shadow-[0_-10px_20px_rgba(0,0,0,0.02)]">
-                        <button type="button" id="ocBtnNextGallery" disabled onclick="ocFromGalleryNext()" class="flex-1 bg-gray-200 text-gray-400 font-bold py-3.5 rounded-xl transition text-[16px] cursor-not-allowed">
-                            下一步
+                    <div id="ocVideoList" class="flex-col gap-3 overflow-y-auto flex-1 no-scrollbar px-5 pb-36"></div>
+                    <div class="absolute bottom-0 left-0 w-full bg-white p-5 border-t border-gray-100 z-10 shadow-[0_-10px_20px_rgba(0,0,0,0.02)] space-y-3">
+                        <label class="flex items-center gap-2 text-[11px] text-gray-400 px-0.5">
+                            <input id="ocDemoFail" type="checkbox" class="accent-gray-500 w-4 h-4" onchange="ocSimulateFail = this.checked">
+                            <span>演示：模拟生成失败</span>
+                        </label>
+                        <button type="button" id="ocBtnNextGallery" disabled onclick="ocStartGenerate()" class="flex-1 w-full bg-gray-200 text-gray-400 font-bold py-3.5 rounded-xl transition text-[16px] cursor-not-allowed">
+                            一键生成
                         </button>
                     </div>
                 </div>
 
-                <!-- 4 模版 -->
-                <div id="ocStepTemplate" class="oneclick-step">
-                    <div class="flex items-center justify-between px-5 py-3 bg-white/95 backdrop-blur border-b border-gray-100">
-                        <button type="button" onclick="ocBackFromTemplate()" class="text-gray-700 p-2 -ml-2"><i class="fa-solid fa-chevron-left text-lg"></i></button>
-                        <h3 class="text-black font-semibold text-base">选择成片模版</h3>
-                        <div class="w-8"></div>
-                    </div>
-                    <div class="flex-1 overflow-y-auto px-5 pb-10 no-scrollbar">
-                        <p id="ocTemplateSportLabel" class="text-[11px] text-gray-400 mt-3 mb-3"></p>
-                        <div id="ocTemplateGrid" class="grid grid-cols-2 gap-3"></div>
-                    </div>
-                </div>
-
-                <!-- 5 配乐 / 文案 -->
-                <div id="ocStepCustomize" class="oneclick-step">
-                    <div class="flex items-center justify-between px-5 py-3 bg-white/95 backdrop-blur border-b border-gray-100">
-                        <button type="button" onclick="ocBackFromCustomize()" class="text-gray-700 p-2 -ml-2"><i class="fa-solid fa-chevron-left text-lg"></i></button>
-                        <h3 class="text-black font-semibold text-base">成片设置</h3>
-                        <div class="w-8"></div>
-                    </div>
-                    <div class="flex-1 overflow-y-auto px-5 pb-10 no-scrollbar">
-                        <div class="mt-4 space-y-3">
-                            <div class="bg-white border border-gray-100 rounded-2xl p-4">
-                                <p class="text-[13px] font-bold text-gray-900 mb-2">背景音乐</p>
-                                <button type="button" onclick="ocCycleBgm()" id="ocBgmBtn" class="w-full bg-[#F3F4F6] text-gray-800 font-bold py-3 rounded-xl text-[13px] flex items-center justify-center active:bg-gray-200 transition">
-                                    <i class="fa-solid fa-music text-[#FF5028] mr-2"></i><span id="ocBgmLabel">OUTSIDE</span><i class="fa-solid fa-angle-right ml-2 text-gray-400"></i>
-                                </button>
-                                <p class="text-[10px] text-gray-400 mt-2">原型：点击循环切换预设 BGM（后续走配置中心）。</p>
-                            </div>
-                            <div class="bg-white border border-gray-100 rounded-2xl p-4">
-                                <p class="text-[13px] font-bold text-gray-900 mb-2">字幕 / 文案</p>
-                                <label class="flex items-center justify-between py-2">
-                                    <span class="text-[13px] text-gray-700">显示球员名与比分条</span>
-                                    <input id="ocToggleCaption" type="checkbox" checked class="accent-[#FF5028] w-5 h-5">
-                                </label>
-                                <label class="flex items-center justify-between py-2 border-t border-gray-50">
-                                    <span class="text-[13px] text-gray-700">片头片尾标题</span>
-                                    <input id="ocToggleTitle" type="checkbox" checked class="accent-[#FF5028] w-5 h-5">
-                                </label>
-                            </div>
-                            <label class="flex items-center gap-2 text-[11px] text-gray-400 px-1">
-                                <input id="ocDemoFail" type="checkbox" class="accent-gray-500 w-4 h-4" onchange="ocSimulateFail = this.checked">
-                                <span>演示：模拟生成失败（走失败引导）</span>
-                            </label>
-                        </div>
-                        <button type="button" onclick="ocStartGenerate()" class="mt-6 w-full bg-black text-white font-bold py-3.5 rounded-2xl active:scale-95 transition text-[16px]">
-                            开始一键成片
-                        </button>
-                    </div>
-                </div>
-
-                <!-- 6 生成中 -->
+                <!-- 2 生成中 -->
                 <div id="ocStepLoading" class="oneclick-step">
                     <div class="flex-1 flex flex-col items-center justify-center px-6 pb-16">
                         <div class="w-24 h-24 rounded-[24px] bg-gray-50 flex items-center justify-center mb-6 shadow-sm border border-gray-100">
@@ -337,22 +243,58 @@
                     </div>
                 </div>
 
-                <!-- 7 成功 -->
-                <div id="ocStepSuccess" class="oneclick-step">
-                    <div class="flex-1 flex flex-col items-center px-5 pt-16 pb-8">
-                        <div class="w-20 h-20 bg-emerald-50 text-emerald-500 rounded-full flex items-center justify-center text-4xl mb-5 shadow-sm border border-emerald-100">
-                            <i class="fa-solid fa-check"></i>
+                <!-- 3 成片编辑（生成后：可换风格 / 配乐 / 剪辑方式） -->
+                <div id="ocStepEdit" class="oneclick-step">
+                    <div class="flex items-center justify-between px-5 py-3 bg-white/95 backdrop-blur border-b border-gray-100">
+                        <button type="button" onclick="closeOneClickFlow()" class="text-gray-700 p-2 -ml-2"><i class="fa-solid fa-chevron-left text-lg"></i></button>
+                        <div class="flex-1 text-center">
+                            <h3 class="text-black font-semibold text-[17px]">成片编辑</h3>
+                            <p class="text-[11px] text-gray-400 mt-0.5">AI 成片已套用，可继续调整</p>
                         </div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-2 text-center">一键成片完成</h3>
-                        <p class="text-sm text-gray-500 text-center mb-8">已保存至本地相册（原型）。</p>
-                        <div class="w-full space-y-3 mt-auto">
-                            <button type="button" onclick="closeOneClickFlow()" class="w-full bg-[#FF5028] text-white font-bold py-3.5 rounded-2xl active:scale-95 transition">完成</button>
-                            <button type="button" onclick="ocOpenManualFromSuccess()" class="w-full bg-gray-100 text-gray-800 font-bold py-3.5 rounded-2xl active:scale-95 transition">继续手动精剪</button>
+                        <button type="button" onclick="ocExportDraft()" class="text-[13px] font-bold text-[#FF5028] -mr-1">导出</button>
+                    </div>
+                    <div class="flex-1 overflow-y-auto no-scrollbar pb-6">
+                        <div class="w-full aspect-video bg-black relative flex items-center justify-center">
+                            <img id="ocEditPreviewImg" src="https://images.unsplash.com/photo-1546519638-68e109498ffc?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover opacity-95" alt="成片预览">
+                            <button type="button" class="w-14 h-14 rounded-full bg-white/30 backdrop-blur flex items-center justify-center shadow-md active:scale-95 transition absolute">
+                                <i class="fa-solid fa-play text-white text-2xl ml-0.5"></i>
+                            </button>
+                        </div>
+                        <div class="px-4 pt-4">
+                            <p id="ocEditStatusLine" class="text-[12px] text-gray-600 leading-relaxed"></p>
+                        </div>
+                        <div class="px-4 mt-4">
+                            <p class="text-[13px] font-bold text-gray-900 mb-2">成片风格</p>
+                            <p class="text-[11px] text-gray-400 mb-2">切换后重新套版（原型为即时切换文案与封面）。</p>
+                            <div id="ocEditTemplateStrip" class="flex gap-3 overflow-x-auto no-scrollbar pb-1 -mx-1 px-1"></div>
+                        </div>
+                        <div class="px-4 mt-5">
+                            <p class="text-[13px] font-bold text-gray-900 mb-2">背景音乐</p>
+                            <button type="button" onclick="ocCycleBgm()" class="w-full bg-[#F3F4F6] text-gray-800 font-bold py-3 rounded-xl text-[13px] flex items-center justify-center active:bg-gray-200 transition">
+                                <i class="fa-solid fa-music text-[#FF5028] mr-2"></i><span id="ocBgmLabel">OUTSIDE</span><i class="fa-solid fa-angle-right ml-2 text-gray-400"></i>
+                            </button>
+                        </div>
+                        <div class="px-4 mt-5">
+                            <p class="text-[13px] font-bold text-gray-900 mb-2">剪辑方式</p>
+                            <div class="flex rounded-2xl bg-gray-100 p-[3px]">
+                                <button type="button" id="ocEditTabAi" onclick="ocSetEditMode('ai')" class="flex-1 py-2.5 rounded-xl text-[12px] font-bold bg-white text-gray-900 shadow-sm">AI 成片</button>
+                                <button type="button" id="ocEditTabManual" onclick="ocSetEditMode('manual')" class="flex-1 py-2.5 rounded-xl text-[12px] font-bold text-gray-500">时间轴</button>
+                                <button type="button" id="ocEditTabRaw" onclick="ocSetEditMode('raw')" class="flex-1 py-2.5 rounded-xl text-[12px] font-bold text-gray-500">原素材</button>
+                            </div>
+                            <p id="ocEditModeHint" class="text-[11px] text-gray-400 mt-2 leading-relaxed"></p>
+                        </div>
+                        <div class="px-4 mt-6 space-y-3">
+                            <button type="button" onclick="ocOpenTimelineFromEdit()" class="w-full bg-black text-white font-bold py-3.5 rounded-2xl active:scale-95 transition text-[15px]">
+                                进入完整时间轴剪辑
+                            </button>
+                            <button type="button" onclick="closeOneClickFlow()" class="w-full bg-gray-100 text-gray-800 font-bold py-3 rounded-2xl active:scale-95 transition text-[14px]">
+                                完成并返回首页
+                            </button>
                         </div>
                     </div>
                 </div>
 
-                <!-- 8 失败 -->
+                <!-- 4 失败 -->
                 <div id="ocStepFail" class="oneclick-step">
                     <div class="flex-1 flex flex-col items-center justify-center px-6 pb-10">
                         <div class="w-[72px] h-[72px] bg-orange-50 text-orange-500 rounded-full flex items-center justify-center text-4xl mb-6">
@@ -379,16 +321,15 @@
     <script>
         const OC_TEMPLATES = {
             basketball: [
-                { id: 'bb-goal', title: '进球集锦 · 自动卡点', desc: '适配得分与关键回合', cover: 'https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif' },
+                { id: 'bb-goal', title: '进球集锦 · 自动卡点', desc: '得分与关键回合', cover: 'https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif' },
                 { id: 'bb-moment', title: '高光瞬间 · 燃剪', desc: '扣篮 / 封盖 / 追身三分', cover: 'https://media.giphy.com/media/l0MYd8bRkV6fJ4K1q/giphy.gif' },
-                { id: 'bb-recap', title: '全场回顾 · 记分板', desc: '球队/比分信息套版', cover: 'https://media.giphy.com/media/26BRuo6sLetdllPAQ/giphy.gif' },
                 { id: 'bb-slow', title: '慢动作回放', desc: '强调动作细节', cover: 'https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif' }
             ],
             football: [
                 { id: 'fb-goal', title: '进球时刻 · 节奏向', desc: '射门与庆祝镜头', cover: 'https://media.giphy.com/media/26BRuo6sLetdllPAQ/giphy.gif' },
                 { id: 'fb-save', title: '扑救 & 反击', desc: '门将高光与转换进攻', cover: 'https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif' },
-                { id: 'fb-tactical', title: '战术复盘向', desc: '跑位与传球线路强调', cover: 'https://media.giphy.com/media/l0MYd8bRkV6fJ4K1q/giphy.gif' },
-                { id: 'fb-mix', title: '混剪 · 全场精华', desc: '多机位素材合并', cover: 'https://media.giphy.com/media/26BRuo6sLetdllPAQ/giphy.gif' }
+                { id: 'fb-tactical', title: '战术复盘向', desc: '跑位与传球线路', cover: 'https://media.giphy.com/media/l0MYd8bRkV6fJ4K1q/giphy.gif' },
+                { id: 'fb-mix', title: '混剪 · 全场精华', desc: '多段素材合并', cover: 'https://media.giphy.com/media/26BRuo6sLetdllPAQ/giphy.gif' }
             ]
         };
 
@@ -400,12 +341,12 @@
 
         const OC_BGMS = ['OUTSIDE', 'Arena Pulse', 'Street Hype', 'Clean Win'];
 
-        let ocSport = null;
-        let ocMode = null;
+        let ocSport = 'basketball';
         let ocSelected = new Set();
         let ocTemplateId = null;
         let ocBgmIndex = 0;
         let ocSimulateFail = false;
+        let ocEditMode = 'ai';
 
         function ocShowStep(id) {
             document.querySelectorAll('.oneclick-step').forEach(el => {
@@ -414,16 +355,17 @@
         }
 
         function openOneClickFlow() {
-            ocSport = null;
-            ocMode = null;
+            ocSport = 'basketball';
             ocSelected = new Set();
             ocTemplateId = null;
             ocBgmIndex = 0;
             ocSimulateFail = false;
+            ocEditMode = 'ai';
             const demoFail = document.getElementById('ocDemoFail');
             if (demoFail) demoFail.checked = false;
-            document.getElementById('ocBgmLabel').textContent = OC_BGMS[ocBgmIndex];
-            ocShowStep('ocStepSport');
+            ocSyncSportPills();
+            ocRenderGallery();
+            ocShowStep('ocStepGallery');
             const m = document.getElementById('oneClickModal');
             m.classList.remove('opacity-0', 'pointer-events-none');
             requestAnimationFrame(() => m.classList.remove('translate-y-full'));
@@ -437,34 +379,27 @@
             updateFloatingFaqVisibility();
         }
 
+        function ocSyncSportPills() {
+            const bb = document.getElementById('ocSportBb');
+            const fb = document.getElementById('ocSportFb');
+            if (!bb || !fb) return;
+            const on = (btn, active) => {
+                btn.classList.toggle('bg-white', active);
+                btn.classList.toggle('text-gray-900', active);
+                btn.classList.toggle('shadow-sm', active);
+                btn.classList.toggle('text-gray-500', !active);
+            };
+            on(bb, ocSport === 'basketball');
+            on(fb, ocSport === 'football');
+        }
+
         function ocSetSport(sport) {
             ocSport = sport;
-            ocShowStep('ocStepMode');
-        }
-
-        function ocBackFromMode() {
-            ocShowStep('ocStepSport');
-        }
-
-        function ocSetVideoMode(mode) {
-            ocMode = mode;
-            ocSelected = new Set();
-            ocRenderGallery();
-            ocShowStep('ocStepGallery');
-        }
-
-        function ocBackFromGallery() {
-            ocSelected = new Set();
-            ocShowStep('ocStepMode');
+            ocSyncSportPills();
         }
 
         function ocRenderGallery() {
-            const hint = document.getElementById('ocGalleryHint');
             const list = document.getElementById('ocVideoList');
-            const nextBtn = document.getElementById('ocBtnNextGallery');
-            hint.textContent = ocMode === 'single'
-                ? '请选择 1 条比赛录像，AI 将在单条素材内截取高光。'
-                : '可多选多段素材，将按时间顺序合并后再截取高光。';
             list.innerHTML = '';
             OC_VIDEOS.forEach(v => {
                 const row = document.createElement('button');
@@ -490,12 +425,8 @@
         }
 
         function ocToggleVideo(id) {
-            if (ocMode === 'single') {
-                ocSelected = new Set([id]);
-            } else {
-                if (ocSelected.has(id)) ocSelected.delete(id);
-                else ocSelected.add(id);
-            }
+            if (ocSelected.has(id)) ocSelected.delete(id);
+            else ocSelected.add(id);
             ocUpdateGallerySelectionUI();
         }
 
@@ -512,56 +443,116 @@
                 ind.classList.toggle('text-transparent', !on);
             });
             const nextBtn = document.getElementById('ocBtnNextGallery');
-            const ok = ocMode === 'single' ? ocSelected.size === 1 : ocSelected.size >= 1;
+            const ok = ocSelected.size >= 1;
             nextBtn.disabled = !ok;
             nextBtn.className = ok
-                ? 'flex-1 bg-black text-white font-bold py-3.5 rounded-xl transition text-[16px] active:scale-95'
-                : 'flex-1 bg-gray-200 text-gray-400 font-bold py-3.5 rounded-xl transition text-[16px] cursor-not-allowed';
+                ? 'flex-1 w-full bg-black text-white font-bold py-3.5 rounded-xl transition text-[16px] active:scale-95'
+                : 'flex-1 w-full bg-gray-200 text-gray-400 font-bold py-3.5 rounded-xl transition text-[16px] cursor-not-allowed';
         }
 
-        function ocFromGalleryNext() {
-            ocRenderTemplates();
-            ocShowStep('ocStepTemplate');
-        }
-
-        function ocRenderTemplates() {
-            const grid = document.getElementById('ocTemplateGrid');
-            const label = document.getElementById('ocTemplateSportLabel');
+        function ocDefaultTemplateId() {
             const list = OC_TEMPLATES[ocSport] || [];
-            label.textContent = ocSport === 'basketball' ? '当前：篮球模版（可配置）' : '当前：足球模版（可配置）';
-            grid.innerHTML = '';
-            list.forEach(t => {
-                const b = document.createElement('button');
-                b.type = 'button';
-                b.className = 'rounded-2xl bg-white border border-gray-100 shadow-sm overflow-hidden active:scale-[0.99] transition text-left';
-                b.innerHTML = `
-                    <div class="relative w-full bg-gray-200" style="aspect-ratio:1/1">
-                        <img src="${t.cover}" class="w-full h-full object-cover" alt="">
-                        <span class="absolute top-2 left-2 bg-white/90 text-[#FF5028] text-[10px] px-2 py-0.5 rounded-full font-bold">模版</span>
-                    </div>
-                    <div class="p-3">
-                        <p class="text-[13px] font-extrabold text-gray-900 truncate">${t.title}</p>
-                        <p class="text-[11px] text-gray-400 mt-0.5 truncate">${t.desc}</p>
-                    </div>`;
-                b.onclick = () => {
-                    ocTemplateId = t.id;
-                    ocShowStep('ocStepCustomize');
-                };
-                grid.appendChild(b);
-            });
+            return list[0] ? list[0].id : null;
         }
 
-        function ocBackFromTemplate() {
-            ocShowStep('ocStepGallery');
-        }
-
-        function ocBackFromCustomize() {
-            ocShowStep('ocStepTemplate');
+        function ocFindTemplate(tid) {
+            const list = OC_TEMPLATES[ocSport] || [];
+            return list.find(t => t.id === tid) || list[0] || null;
         }
 
         function ocCycleBgm() {
             ocBgmIndex = (ocBgmIndex + 1) % OC_BGMS.length;
+            const el = document.getElementById('ocBgmLabel');
+            if (el) el.textContent = OC_BGMS[ocBgmIndex];
+            ocRefreshEditStatus();
+        }
+
+        function ocRefreshEditStatus() {
+            const line = document.getElementById('ocEditStatusLine');
+            if (!line) return;
+            const t = ocFindTemplate(ocTemplateId);
+            const name = t ? t.title : '智能成片';
+            line.textContent = `已套用：${name} · 配乐 ${OC_BGMS[ocBgmIndex]} · ${ocSport === 'basketball' ? '篮球' : '足球'}识别`;
+        }
+
+        function ocRenderEditTemplateStrip() {
+            const strip = document.getElementById('ocEditTemplateStrip');
+            if (!strip) return;
+            const list = OC_TEMPLATES[ocSport] || [];
+            strip.innerHTML = '';
+            list.forEach(t => {
+                const b = document.createElement('button');
+                b.type = 'button';
+                b.dataset.tid = t.id;
+                b.className = 'flex-shrink-0 w-[120px] rounded-2xl border overflow-hidden text-left transition active:scale-[0.98]';
+                b.classList.toggle('border-[#FF5028]', t.id === ocTemplateId);
+                b.classList.toggle('border-gray-100', t.id !== ocTemplateId);
+                b.innerHTML = `
+                    <div class="relative w-full bg-gray-200" style="aspect-ratio:1/1">
+                        <img src="${t.cover}" class="w-full h-full object-cover" alt="">
+                    </div>
+                    <div class="p-2 bg-white">
+                        <p class="text-[11px] font-extrabold text-gray-900 truncate">${t.title}</p>
+                    </div>`;
+                b.onclick = () => {
+                    ocTemplateId = t.id;
+                    ocRenderEditTemplateStrip();
+                    ocRefreshEditStatus();
+                };
+                strip.appendChild(b);
+            });
+        }
+
+        function ocSetEditMode(mode) {
+            ocEditMode = mode;
+            const ai = document.getElementById('ocEditTabAi');
+            const man = document.getElementById('ocEditTabManual');
+            const raw = document.getElementById('ocEditTabRaw');
+            const hint = document.getElementById('ocEditModeHint');
+            [ai, man, raw].forEach(el => {
+                if (!el) return;
+                el.classList.remove('bg-white', 'text-gray-900', 'shadow-sm');
+                el.classList.add('text-gray-500');
+            });
+            const map = { ai: ai, manual: man, raw: raw };
+            const cur = map[mode];
+            if (cur) {
+                cur.classList.add('bg-white', 'text-gray-900', 'shadow-sm');
+                cur.classList.remove('text-gray-500');
+            }
+            if (hint) {
+                if (mode === 'ai') hint.textContent = '保留 AI 一键成片的节奏与转场，可仅换风格与配乐。';
+                else if (mode === 'manual') hint.textContent = '进入时间轴后可自由裁剪、排序与调色；与 Insta360 / 剪映 的「先成片再精剪」一致。';
+                else hint.textContent = '回到所选原始素材时间线，不使用 AI 截取。';
+            }
+        }
+
+        function ocEnterEditStep() {
+            ocTemplateId = ocDefaultTemplateId();
             document.getElementById('ocBgmLabel').textContent = OC_BGMS[ocBgmIndex];
+            ocSetEditMode('ai');
+            ocRenderEditTemplateStrip();
+            ocRefreshEditStatus();
+            ocShowStep('ocStepEdit');
+        }
+
+        function ocExportDraft() {
+            alert('原型：导出成片（可接相册 / 分享面板）。');
+        }
+
+        function ocOpenTimelineFromEdit() {
+            closeOneClickFlow();
+            const title = document.getElementById('manualEditorTitle');
+            const sourceLabel = document.getElementById('manualEditorSource');
+            if (title) title.textContent = '时间轴剪辑';
+            if (sourceLabel) sourceLabel.textContent = '来源：一键成片 · 已套 AI 算法，可继续改';
+            const selectView = document.getElementById('manualEditorSelect');
+            const workspaceView = document.getElementById('manualEditorWorkspace');
+            if (selectView && workspaceView) {
+                selectView.classList.add('hidden');
+                workspaceView.classList.remove('hidden');
+            }
+            openManualEditorModal();
         }
 
         function ocStartGenerate() {
@@ -582,14 +573,14 @@
                     txt.textContent = '即将完成';
                     setTimeout(() => {
                         if (ocSimulateFail) ocShowStep('ocStepFail');
-                        else ocShowStep('ocStepSuccess');
+                        else ocEnterEditStep();
                     }, 400);
                     return;
                 }
                 bar.style.width = p + '%';
                 if (p < 35) txt.textContent = '分析画面与事件…';
-                else if (p < 70) txt.textContent = '匹配模版与节奏…';
-                else txt.textContent = '合成配乐与字幕…';
+                else if (p < 70) txt.textContent = '匹配节奏与转场…';
+                else txt.textContent = '合成配乐与成片…';
             }, 380);
         }
 
@@ -604,22 +595,11 @@
             ocShowStep('ocStepGallery');
         }
 
-        function ocOpenManualFromSuccess() {
-            closeOneClickFlow();
-            const sourceLabel = document.getElementById('manualEditorSource');
-            if (sourceLabel) sourceLabel.textContent = '来源：一键成片成片';
-            const selectView = document.getElementById('manualEditorSelect');
-            const workspaceView = document.getElementById('manualEditorWorkspace');
-            if (selectView && workspaceView) {
-                selectView.classList.add('hidden');
-                workspaceView.classList.remove('hidden');
-            }
-            openManualEditorModal();
-        }
-
         function openManualEditorFromOneClickFail() {
+            const title = document.getElementById('manualEditorTitle');
             const sourceLabel = document.getElementById('manualEditorSource');
-            if (sourceLabel) sourceLabel.textContent = '来源：一键成片失败引导';
+            if (title) title.textContent = '手动剪辑';
+            if (sourceLabel) sourceLabel.textContent = '来源：一键成片未识别到高光';
             const selectView = document.getElementById('manualEditorSelect');
             const workspaceView = document.getElementById('manualEditorWorkspace');
             if (selectView && workspaceView) {
@@ -678,6 +658,8 @@
         }
 
         function openNewProjectFlow() {
+            const title = document.getElementById('manualEditorTitle');
+            if (title) title.textContent = '手动剪辑';
             const sourceLabel = document.getElementById('manualEditorSource');
             if (sourceLabel) sourceLabel.textContent = '从新建项目进入';
             const selectView = document.getElementById('manualEditorSelect');
