@@ -2070,6 +2070,29 @@
                                     <p class="text-[10px] text-white/35 px-3 pt-2 pb-1" id="ocEditClipSegHint">点击时间轴片段，在底部勾选上方使用工具</p>
                                 </div>
                             </div>
+                            <div id="ocEditMusicChrome" class="hidden flex flex-col min-h-0 overflow-hidden shrink-0 bg-[#161616] border-t border-white/[0.08]">
+                                <div id="ocEditMusicTimelineArea" class="flex flex-col bg-[#161616] shrink-0 border-t border-white/[0.06] py-1.5 px-3">
+                                    <div id="ocEditMusicTimelineRuler" class="h-5 shrink-0 flex flex-row items-end justify-between gap-1 overflow-hidden border-b border-white/[0.04] mb-1 w-full"></div>
+                                    <div class="relative shrink-0">
+                                        <div class="flex flex-col gap-0.5">
+                                            <div class="relative h-[56px] shrink-0">
+                                                <div id="ocEditMusicVideoScroll" class="absolute inset-0 overflow-x-auto no-scrollbar flex items-stretch pb-0.5">
+                                                    <div id="ocEditMusicVideoRow" class="flex items-stretch gap-0.5 h-[56px] min-w-min pr-1"></div>
+                                                </div>
+                                            </div>
+                                            <div class="relative h-[48px] shrink-0">
+                                                <div id="ocEditMusicAudioScroll" class="absolute inset-0 overflow-x-auto no-scrollbar flex items-stretch">
+                                                    <div id="ocEditMusicAudioRow" class="flex items-stretch gap-0.5 h-[48px] min-w-min pr-1"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="pointer-events-none absolute left-[28%] top-0 bottom-0 w-px bg-white/90 z-10 shadow-[0_0_8px_rgba(255,255,255,0.35)]" id="ocEditMusicPlayheadLine" aria-hidden="true"></div>
+                                    </div>
+                                </div>
+                                <div id="ocEditMusicSegmentActions" class="shrink-0 bg-[#161616] border-t border-white/[0.08]">
+                                    <p class="text-[10px] text-white/35 px-3 pt-2 pb-1" id="ocEditMusicSegHint">点击配乐轨道，在下方使用音量等工具</p>
+                                </div>
+                            </div>
                         </div>
                         <div id="ocEditTemplatePanel" class="shrink-0 bg-[#161616] border-t border-white/[0.08]">
                             <div class="px-3 pt-2 pb-1">
@@ -2108,6 +2131,27 @@
                             </div>
                             <div class="flex justify-end items-center py-2.5 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
                                 <button type="button" onclick="ocConfirmClipEdit()" class="w-11 h-11 rounded-xl bg-white/[0.08] flex items-center justify-center text-white active:scale-95 active:bg-white/[0.12] transition" aria-label="完成剪辑" title="完成">
+                                    <i class="fa-solid fa-check text-[20px]"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div id="ocEditMusicBottomBar" class="hidden shrink-0 flex flex-col border-t border-white/[0.08] bg-[#121212]">
+                            <div class="flex items-stretch py-2 pl-1 pr-2 gap-1 border-b border-white/[0.06]">
+                                <button type="button" onclick="ocSetEditTool('template')" class="shrink-0 flex flex-col items-center justify-center min-w-[44px] px-0.5 text-white/45 active:text-white/75 active:scale-95 transition" aria-label="返回模版">
+                                    <i class="fa-solid fa-chevron-left text-[15px]"></i>
+                                    <span class="text-[9px] font-medium leading-tight mt-0.5 text-center">模版</span>
+                                </button>
+                                <div class="flex-1 min-w-0 flex items-center justify-around gap-1 overflow-x-auto no-scrollbar py-0.5">
+                                    <button type="button" onclick="window.ocOpenMusicLibrary()" class="shrink-0 px-2.5 py-2 rounded-xl bg-white/[0.06] text-[10px] font-medium text-white/80 border border-white/[0.06] active:scale-[0.98]">音乐库</button>
+                                    <button type="button" onclick="alert('音效库（原型）')" class="shrink-0 px-2.5 py-2 rounded-xl bg-white/[0.06] text-[10px] font-medium text-white/80 border border-white/[0.06] active:scale-[0.98]">音效</button>
+                                    <button type="button" onclick="alert('从视频中提取音乐（原型）')" class="shrink-0 px-2.5 py-2 rounded-xl bg-white/[0.06] text-[10px] font-medium text-white/80 border border-white/[0.06] active:scale-[0.98]">提取音乐</button>
+                                </div>
+                            </div>
+                            <div class="flex items-stretch py-2 px-2 gap-1 min-h-[52px] border-b border-white/[0.06]">
+                                <div id="ocEditMusicBottomTools" class="flex-1 min-w-0 flex flex-nowrap items-center justify-start gap-1 overflow-x-auto no-scrollbar py-0.5"></div>
+                            </div>
+                            <div class="flex justify-end items-center py-2.5 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+                                <button type="button" onclick="ocConfirmMusicEdit()" class="w-11 h-11 rounded-xl bg-white/[0.08] flex items-center justify-center text-white active:scale-95 active:bg-white/[0.12] transition" aria-label="完成配乐" title="完成">
                                     <i class="fa-solid fa-check text-[20px]"></i>
                                 </button>
                             </div>
@@ -4848,6 +4892,12 @@ document.addEventListener('click', function(e){
         { act: "caption", icon: "fa-font", label: "文字·贴纸" },
         { act: "sort", icon: "fa-arrow-down-short-wide", label: "排序" }
     ];
+    const OC_MUSIC_TOOL_DEFS = [
+        { act: "volume", icon: "fa-volume-high", label: "音量" },
+        { act: "replace", icon: "fa-right-left", label: "替换" },
+        { act: "split", icon: "fa-cut", label: "分割" },
+        { act: "del", icon: "fa-trash", label: "删除" }
+    ];
 
     let ocSourceTab = "camera";
     let ocCameraSportId = "basketball";
@@ -4859,6 +4909,7 @@ document.addEventListener('click', function(e){
     let ocEditToolId = "template";
     let ocEditPlaying = false;
     let ocTimelineSelectedSeg = null;
+    let ocMusicTimelineSelected = false;
     let ocBgmIndex = 0;
     let ocSimulateFail = false;
 
@@ -5268,6 +5319,76 @@ document.addEventListener('click', function(e){
         return out;
     }
 
+    function ocFillTimelineRuler(rulerEl, totalSec) {
+        if (!rulerEl) return;
+        rulerEl.innerHTML = "";
+        var tsec = totalSec;
+        if (tsec < 1) tsec = 15;
+        var step = 2;
+        var tickCount = Math.floor(tsec / step) + 1;
+        for (var k = 0; k < tickCount; k++) {
+            var t = Math.min(k * step, tsec);
+            var d = document.createElement("div");
+            d.className = "shrink-0 text-[8px] text-white/40 tabular-nums leading-none pb-0.5";
+            d.textContent = ocFormatTotalSeconds(t);
+            rulerEl.appendChild(d);
+        }
+    }
+
+    function ocFillVideoTimelineRow(rowEl, segs, totalSec, opts) {
+        opts = opts || {};
+        var interactive = opts.interactive !== false;
+        var includeAdd = !!opts.includeAdd;
+        var clipClass = opts.clipClass || "oc-timeline-clip";
+        if (!rowEl) return 0;
+        rowEl.innerHTML = "";
+        var gapPx = 2;
+        var totalW = 0;
+        segs.forEach(function (s, idx) {
+            if (idx > 0) totalW += gapPx;
+            var sec = s.seconds || 1;
+            var w = Math.round(Math.max(40, Math.min(120, (sec / totalSec) * 220)));
+            totalW += w;
+            var btn = document.createElement("button");
+            btn.type = "button";
+            btn.setAttribute("data-oc-seg-id", s.id);
+            btn.className = clipClass + " relative h-full rounded-md overflow-hidden shrink-0 border border-white/15 bg-neutral-900 transition" +
+                (interactive ? " active:opacity-90" : " pointer-events-none opacity-95");
+            btn.style.width = w + "px";
+            var im = document.createElement("img");
+            im.src = s.thumb;
+            im.className = "w-full h-full object-cover pointer-events-none";
+            im.alt = "";
+            btn.appendChild(im);
+            var durTop = document.createElement("div");
+            durTop.className = "absolute top-1 left-1.5 right-7 text-[11px] font-bold text-white tabular-nums drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)] pointer-events-none";
+            var secv = s.seconds != null ? s.seconds : 0;
+            durTop.textContent = (secv % 1 === 0 ? secv : secv.toFixed(1)) + "s";
+            btn.appendChild(durTop);
+            var cam = document.createElement("div");
+            cam.className = "absolute bottom-1 right-1 w-5 h-5 rounded-md bg-black/50 flex items-center justify-center text-white/90 pointer-events-none";
+            cam.innerHTML = "<i class=\"fa-solid fa-video text-[9px]\"></i>";
+            btn.appendChild(cam);
+            if (interactive) {
+                (function (seg) {
+                    btn.onclick = function () { ocSelectTimelineSegment(seg); };
+                })(s);
+            }
+            rowEl.appendChild(btn);
+        });
+        if (includeAdd) {
+            totalW += (segs.length ? gapPx : 0) + 44;
+            var addBtn = document.createElement("button");
+            addBtn.type = "button";
+            addBtn.className = "h-full w-11 shrink-0 rounded-lg border border-dashed border-white/30 bg-white/[0.06] flex items-center justify-center text-white/55 text-lg active:bg-white/10";
+            addBtn.setAttribute("aria-label", "添加片段");
+            addBtn.innerHTML = "<i class=\"fa-solid fa-plus text-[16px]\"></i>";
+            addBtn.onclick = function () { alert("从相册或相机追加片段（原型）"); };
+            rowEl.appendChild(addBtn);
+        }
+        return totalW;
+    }
+
     function ocUpdateEditTimelineDisplay() {
         var segs = ocBuildEditSegments();
         var totalSec = 0;
@@ -5300,6 +5421,94 @@ document.addEventListener('click', function(e){
 
     window.ocConfirmClipEdit = function () {
         window.ocSetEditTool("template");
+    };
+
+    window.ocConfirmMusicEdit = function () {
+        window.ocSetEditTool("template");
+    };
+
+    window.ocMusicTrackAction = function (act, meta) {
+        var name = (meta && meta.title) ? meta.title : "当前配乐";
+        var msg = {
+            volume: "音量：调节「" + name + "」音量与淡入淡出（原型）",
+            replace: "替换：为成片更换配乐「" + name + "」（原型）",
+            split: "分割：在播放头位置切开配乐片段（原型）",
+            del: "删除：移除配乐「" + name + "」（原型）"
+        };
+        alert(msg[act] || act);
+    };
+
+    window.ocRenderMusicBottomTools = function (meta) {
+        var host = document.getElementById("ocEditMusicBottomTools");
+        if (!host) return;
+        host.innerHTML = "";
+        OC_MUSIC_TOOL_DEFS.forEach(function (t) {
+            var b = document.createElement("button");
+            b.type = "button";
+            b.className = "flex flex-col items-center justify-center gap-0.5 min-w-[48px] shrink-0 py-1 px-1 rounded-lg active:opacity-70 active:scale-[0.98] transition text-white/85 disabled:opacity-35 disabled:pointer-events-none disabled:saturate-0";
+            b.innerHTML = "<i class=\"fa-solid " + t.icon + " text-[17px]\"></i><span class=\"text-[8px] font-medium text-white/50 leading-tight text-center max-w-[56px]\">" + t.label + "</span>";
+            b.disabled = !meta;
+            if (meta) {
+                (function (act, m) {
+                    b.onclick = function () { window.ocMusicTrackAction(act, m); };
+                })(t.act, meta);
+            }
+            host.appendChild(b);
+        });
+    };
+
+    function ocSelectMusicTrack(sel) {
+        ocMusicTimelineSelected = !!sel;
+        var hint = document.getElementById("ocEditMusicSegHint");
+        if (!sel) {
+            if (hint) hint.classList.remove("hidden");
+            window.ocRenderMusicBottomTools(null);
+            document.querySelectorAll(".oc-music-audio-clip").forEach(function (n) {
+                n.classList.remove("ring-2", "ring-violet-400", "ring-offset-1", "ring-offset-[#161616]");
+            });
+            return;
+        }
+        if (hint) hint.classList.add("hidden");
+        var meta = { id: "oc-bgm", title: OC_BGMS[ocBgmIndex] };
+        window.ocRenderMusicBottomTools(meta);
+        document.querySelectorAll(".oc-music-audio-clip").forEach(function (n) {
+            n.classList.add("ring-2", "ring-violet-400", "ring-offset-1", "ring-offset-[#161616]");
+        });
+    }
+
+    window.ocRenderMusicTimelineTrack = function () {
+        var ruler = document.getElementById("ocEditMusicTimelineRuler");
+        var vrow = document.getElementById("ocEditMusicVideoRow");
+        var arow = document.getElementById("ocEditMusicAudioRow");
+        if (!ruler || !vrow || !arow) return;
+        var segs = ocBuildEditSegments();
+        var totalSec = 0;
+        segs.forEach(function (s) { totalSec += s.seconds || 0; });
+        if (totalSec < 1) totalSec = 15;
+        ocFillTimelineRuler(ruler, totalSec);
+        var trackW = ocFillVideoTimelineRow(vrow, segs, totalSec, {
+            interactive: false,
+            includeAdd: false,
+            clipClass: "oc-music-timeline-vclip"
+        });
+        var minAudioW = Math.max(200, trackW || 220);
+        arow.innerHTML = "";
+        var ab = document.createElement("button");
+        ab.type = "button";
+        ab.setAttribute("data-oc-music-track", "1");
+        ab.className = "oc-music-audio-clip relative h-full rounded-md shrink-0 border border-violet-500/40 bg-gradient-to-b from-violet-900/50 to-[#1a1a24] active:opacity-90 transition flex items-center px-3 text-left";
+        ab.style.width = minAudioW + "px";
+        var label = OC_BGMS[ocBgmIndex];
+        ab.innerHTML = "<i class=\"fa-solid fa-music text-violet-300 text-[14px] mr-2 shrink-0\"></i><span class=\"text-[11px] font-semibold text-white/90 truncate\">" + label + "</span>";
+        ab.onclick = function () { ocSelectMusicTrack(true); };
+        arow.appendChild(ab);
+        ocSelectMusicTrack(true);
+        ocUpdateEditTimelineDisplay();
+    };
+
+    window.ocOpenMusicLibrary = function () {
+        alert("音乐库（原型）：将打开曲库；演示为切换到下一首配乐。");
+        window.ocCycleBgm();
     };
 
     window.ocRenderClipBottomTools = function (seg) {
@@ -5359,55 +5568,16 @@ document.addEventListener('click', function(e){
         var ruler = document.getElementById("ocEditTimelineRuler");
         var row = document.getElementById("ocEditTimelineVideoRow");
         if (!ruler || !row) return;
-        ruler.innerHTML = "";
-        row.innerHTML = "";
         var segs = ocBuildEditSegments();
         var totalSec = 0;
         segs.forEach(function (s) { totalSec += s.seconds || 0; });
         if (totalSec < 1) totalSec = 15;
-        var step = 2;
-        var tickCount = Math.floor(totalSec / step) + 1;
-        for (var k = 0; k < tickCount; k++) {
-            var t = Math.min(k * step, totalSec);
-            var d = document.createElement("div");
-            d.className = "shrink-0 text-[8px] text-white/40 tabular-nums leading-none pb-0.5";
-            d.textContent = ocFormatTotalSeconds(t);
-            ruler.appendChild(d);
-        }
-        segs.forEach(function (s) {
-            var sec = s.seconds || 1;
-            var w = Math.round(Math.max(40, Math.min(120, (sec / totalSec) * 220)));
-            var btn = document.createElement("button");
-            btn.type = "button";
-            btn.setAttribute("data-oc-seg-id", s.id);
-            btn.className = "oc-timeline-clip relative h-full rounded-md overflow-hidden shrink-0 border border-white/15 bg-neutral-900 active:opacity-90 transition";
-            btn.style.width = w + "px";
-            var im = document.createElement("img");
-            im.src = s.thumb;
-            im.className = "w-full h-full object-cover pointer-events-none";
-            im.alt = "";
-            btn.appendChild(im);
-            var durTop = document.createElement("div");
-            durTop.className = "absolute top-1 left-1.5 right-7 text-[11px] font-bold text-white tabular-nums drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)] pointer-events-none";
-            var secv = s.seconds != null ? s.seconds : 0;
-            durTop.textContent = (secv % 1 === 0 ? secv : secv.toFixed(1)) + "s";
-            btn.appendChild(durTop);
-            var cam = document.createElement("div");
-            cam.className = "absolute bottom-1 right-1 w-5 h-5 rounded-md bg-black/50 flex items-center justify-center text-white/90 pointer-events-none";
-            cam.innerHTML = "<i class=\"fa-solid fa-video text-[9px]\"></i>";
-            btn.appendChild(cam);
-            (function (seg) {
-                btn.onclick = function () { ocSelectTimelineSegment(seg); };
-            })(s);
-            row.appendChild(btn);
+        ocFillTimelineRuler(ruler, totalSec);
+        ocFillVideoTimelineRow(row, segs, totalSec, {
+            interactive: true,
+            includeAdd: true,
+            clipClass: "oc-timeline-clip"
         });
-        var addBtn = document.createElement("button");
-        addBtn.type = "button";
-        addBtn.className = "h-full w-11 shrink-0 rounded-lg border border-dashed border-white/30 bg-white/[0.06] flex items-center justify-center text-white/55 text-lg active:bg-white/10";
-        addBtn.setAttribute("aria-label", "添加片段");
-        addBtn.innerHTML = "<i class=\"fa-solid fa-plus text-[16px]\"></i>";
-        addBtn.onclick = function () { alert("从相册或相机追加片段（原型）"); };
-        row.appendChild(addBtn);
         if (segs.length) ocSelectTimelineSegment(segs[0]);
         else ocSelectTimelineSegment(null);
         ocUpdateEditTimelineDisplay();
@@ -5433,25 +5603,41 @@ document.addEventListener('click', function(e){
         ocEditToolId = tool;
         var tplChrome = document.getElementById("ocEditTemplateChrome");
         var clipChrome = document.getElementById("ocEditClipChrome");
+        var musicChrome = document.getElementById("ocEditMusicChrome");
         var tplPanel = document.getElementById("ocEditTemplatePanel");
         var musPanel = document.getElementById("ocEditSubPanelMusic");
         var mainBar = document.getElementById("ocEditMainBottomBar");
         var clipBar = document.getElementById("ocEditClipBottomBar");
+        var musicBar = document.getElementById("ocEditMusicBottomBar");
         if (tool === "edit") {
             if (tplChrome) tplChrome.classList.remove("hidden");
             if (clipChrome) clipChrome.classList.remove("hidden");
+            if (musicChrome) musicChrome.classList.add("hidden");
             if (tplPanel) tplPanel.classList.add("hidden");
             if (musPanel) musPanel.classList.add("hidden");
             if (mainBar) mainBar.classList.add("hidden");
             if (clipBar) clipBar.classList.remove("hidden");
+            if (musicBar) musicBar.classList.add("hidden");
             window.ocRenderTimelineTrack();
+        } else if (tool === "music") {
+            if (tplChrome) tplChrome.classList.remove("hidden");
+            if (clipChrome) clipChrome.classList.add("hidden");
+            if (musicChrome) musicChrome.classList.remove("hidden");
+            if (tplPanel) tplPanel.classList.add("hidden");
+            if (musPanel) musPanel.classList.add("hidden");
+            if (mainBar) mainBar.classList.add("hidden");
+            if (clipBar) clipBar.classList.add("hidden");
+            if (musicBar) musicBar.classList.remove("hidden");
+            window.ocRenderMusicTimelineTrack();
         } else {
             if (tplChrome) tplChrome.classList.remove("hidden");
             if (clipChrome) clipChrome.classList.add("hidden");
+            if (musicChrome) musicChrome.classList.add("hidden");
             if (tplPanel) tplPanel.classList.toggle("hidden", tool !== "template");
-            if (musPanel) musPanel.classList.toggle("hidden", tool !== "music");
+            if (musPanel) musPanel.classList.add("hidden");
             if (mainBar) mainBar.classList.remove("hidden");
             if (clipBar) clipBar.classList.add("hidden");
+            if (musicBar) musicBar.classList.add("hidden");
         }
         document.querySelectorAll(".oc-edit-tool").forEach(function (el) {
             var on = (tool === "template" && el.id === "ocEditToolTpl") ||
@@ -5463,17 +5649,19 @@ document.addEventListener('click', function(e){
             el.classList.toggle("text-white/45", !on);
         });
         if (tool === "music") window.ocRefreshEditStatus();
-        if (tool === "template" || tool === "edit") ocUpdateEditTimelineDisplay();
+        if (tool === "template" || tool === "edit" || tool === "music") ocUpdateEditTimelineDisplay();
     };
 
     window.ocCycleBgm = function () {
         ocBgmIndex = (ocBgmIndex + 1) % OC_BGMS.length;
         window.ocRefreshEditStatus();
+        if (ocEditToolId === "music") window.ocRenderMusicTimelineTrack();
     };
 
     window.ocEnterEditStep = function () {
         ocHighlightCategoryId = "rec";
         ocEditToolId = "template";
+        ocMusicTimelineSelected = false;
         ocEnsureTemplateInFilter();
         window.ocRenderHighlightCategoryTabs();
         window.ocRenderEditTemplateStrip();
