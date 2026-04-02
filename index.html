@@ -2029,38 +2029,66 @@
                     </div>
                 </div>
                 <div id="ocStepEdit" class="oneclick-step bg-[#121212] text-white min-h-0" style="display: none !important;">
-                    <div class="flex items-center justify-between px-3 py-2.5 border-b border-white/[0.08] shrink-0 bg-[#121212]">
-                        <button type="button" onclick="closeOneClickFlow()" class="w-10 h-10 rounded-full bg-white/[0.08] flex items-center justify-center text-white/90 active:scale-95" aria-label="关闭"><i class="fa-solid fa-chevron-left text-[15px]"></i></button>
-                        <span class="text-[15px] font-semibold text-white/95">成片编辑</span>
-                        <button type="button" onclick="ocStartExport()" class="text-[15px] font-bold text-[#FF5028] px-2 py-1">导出</button>
-                    </div>
-                    <div class="flex-1 flex flex-col min-h-0 overflow-hidden">
-                        <div class="w-full bg-black aspect-video relative flex items-center justify-center shrink-0">
-                            <img id="ocEditPreviewImg" src="https://images.unsplash.com/photo-1546519638-68e109498ffc?ixlib=rb-1.2.1&auto=format&fit=crop&w=960&q=80" class="w-full h-full object-cover opacity-95" alt="预览">
-                            <button type="button" class="absolute w-14 h-14 rounded-full bg-white/25 backdrop-blur flex items-center justify-center shadow-lg active:scale-95 transition"><i class="fa-solid fa-play text-white text-2xl ml-1"></i></button>
+                    <div class="flex items-center justify-between px-2 py-2 border-b border-white/[0.08] shrink-0 bg-[#121212]">
+                        <button type="button" onclick="closeOneClickFlow()" class="w-10 h-10 rounded-full flex items-center justify-center text-white/90 active:bg-white/10" aria-label="返回"><i class="fa-solid fa-chevron-left text-[17px]"></i></button>
+                        <div class="flex items-center gap-2">
+                            <span class="px-2.5 py-1 rounded-full bg-white/[0.08] text-[11px] font-semibold text-white/85 border border-white/[0.06]">9:16</span>
+                            <span class="px-2.5 py-1 rounded-full bg-white/[0.08] text-[11px] font-semibold text-white/85 border border-white/[0.06]">1080P</span>
                         </div>
-                        <div class="px-3 pt-2 shrink-0"><p id="ocEditStatusLine" class="text-[11px] text-white/55 leading-relaxed"></p></div>
-                        <div class="px-3 py-2 border-t border-white/[0.06] shrink-0 bg-[#161616]">
-                            <div class="flex items-center justify-between text-[10px] text-white/40 mb-1"><span>时间轴</span><span id="ocTimelineTime">00:00 / 00:49</span></div>
-                            <div class="relative h-11 rounded-lg bg-[#0a0a0a] border border-white/[0.08] overflow-hidden">
-                                <div class="absolute inset-y-0 left-[8%] w-[22%] rounded bg-[#FF5028]/35 border border-[#FF5028]/60"></div>
-                                <div class="absolute inset-y-0 left-[38%] w-[18%] rounded bg-white/10 border border-white/15"></div>
-                                <div class="absolute inset-y-0 left-[60%] w-[28%] rounded bg-[#FF5028]/25 border border-[#FF5028]/40"></div>
-                                <div class="absolute top-0 bottom-0 left-[35%] w-0.5 bg-white z-10 shadow-[0_0_6px_rgba(255,255,255,0.9)]"></div>
+                        <button type="button" onclick="ocStartExport()" class="text-[15px] font-bold text-[#FF5028] px-3 py-1.5">导出</button>
+                    </div>
+                    <div class="flex-1 flex flex-col min-h-0 overflow-hidden bg-[#0a0a0a]">
+                        <div class="flex-1 flex flex-col min-h-0 overflow-hidden">
+                            <div class="flex-1 flex items-center justify-center min-h-0 px-4 py-3">
+                                <div class="relative w-full max-w-[240px] aspect-[9/16] rounded-[12px] overflow-hidden bg-black shadow-[0_12px_40px_rgba(0,0,0,0.45)] ring-1 ring-white/10">
+                                    <img id="ocEditPreviewImg" src="https://images.unsplash.com/photo-1546519638-68e109498ffc?ixlib=rb-1.2.1&auto=format&fit=crop&w=960&q=80" class="w-full h-full object-cover" alt="预览">
+                                    <button type="button" class="absolute inset-0 flex items-center justify-center bg-black/20 active:bg-black/30 transition" aria-label="播放">
+                                        <span class="w-14 h-14 rounded-full bg-white/30 backdrop-blur-sm flex items-center justify-center shadow-lg"><i class="fa-solid fa-play text-white text-xl ml-0.5"></i></span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="shrink-0 px-4 pb-2">
+                                <div class="flex items-center gap-3">
+                                    <button type="button" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white shrink-0 active:scale-95" aria-label="播放"><i class="fa-solid fa-play text-sm ml-0.5"></i></button>
+                                    <div class="flex-1 h-[3px] bg-white/15 rounded-full overflow-hidden">
+                                        <div class="h-full w-[18%] rounded-full bg-[#FF5028]" id="ocEditPlayheadBar"></div>
+                                    </div>
+                                    <span class="text-[10px] text-white/50 tabular-nums shrink-0 font-medium" id="ocTimelineTime">00:03 / 00:49</span>
+                                </div>
+                                <p id="ocEditStatusLine" class="text-[10px] text-white/40 mt-2 text-center leading-relaxed line-clamp-2"></p>
                             </div>
                         </div>
-                        <div class="flex justify-around items-center py-2.5 px-1 border-t border-white/[0.06] bg-[#1a1a1a] shrink-0">
-                            <button type="button" class="flex flex-col items-center gap-1 min-w-[52px] text-white/75" onclick="document.getElementById('ocTplRow')?.scrollIntoView({behavior:'smooth',block:'nearest'})"><i class="fa-solid fa-layer-group text-[18px]"></i><span class="text-[10px]">模版</span></button>
-                            <button type="button" class="flex flex-col items-center gap-1 min-w-[52px] text-white/75" onclick="ocCycleBgm()"><i class="fa-solid fa-music text-[18px]"></i><span class="text-[10px]">音频</span></button>
-                            <button type="button" class="flex flex-col items-center gap-1 min-w-[52px] text-white/75"><i class="fa-solid fa-font text-[18px]"></i><span class="text-[10px]">文字</span></button>
-                            <button type="button" class="flex flex-col items-center gap-1 min-w-[52px] text-white/75"><i class="fa-solid fa-expand text-[18px]"></i><span class="text-[10px]">比例</span></button>
+                        <div id="ocEditTemplatePanel" class="shrink-0 bg-[#161616] border-t border-white/[0.08]">
+                            <div class="px-3 pt-2.5 pb-1">
+                                <p class="text-[12px] font-bold text-white/90">高光模版</p>
+                                <p class="text-[10px] text-white/38 mt-0.5">运动垂类 · 按瞬间类型挑选 AI 成片节奏</p>
+                                <div id="ocHighlightCategoryTabs" class="flex gap-2 overflow-x-auto no-scrollbar mt-2.5 pb-1"></div>
+                            </div>
+                            <div id="ocEditTemplateStrip" class="flex gap-2.5 overflow-x-auto no-scrollbar px-3 pb-3 pt-1"></div>
                         </div>
-                        <div id="ocTplRow" class="px-3 pb-2 border-t border-white/[0.06] bg-[#121212] shrink-0">
-                            <p class="text-[12px] font-semibold text-white/90 pt-2 pb-2">成片风格</p>
-                            <div id="ocEditTemplateStrip" class="flex gap-2 overflow-x-auto no-scrollbar pb-1"></div>
+                        <div id="ocEditSubPanelMusic" class="hidden shrink-0 bg-[#161616] border-t border-white/[0.08] px-4 py-4">
+                            <p class="text-[13px] font-semibold text-white/90 mb-2">配乐</p>
+                            <button type="button" onclick="ocCycleBgm()" class="w-full py-3 rounded-xl bg-white/[0.06] text-[13px] text-white/85 border border-white/10 active:scale-[0.99] transition">切换配乐（演示）<span id="ocBgmLabel" class="text-white/50"></span></button>
                         </div>
-                        <div class="mt-auto px-3 pb-4 pt-1 shrink-0 bg-[#121212]">
-                            <button type="button" onclick="ocOpenAdvancedTimeline()" class="w-full py-3 rounded-xl bg-white/[0.08] text-[13px] font-semibold text-white/90 border border-white/[0.1] active:scale-[0.99] transition">进入完整时间轴剪辑</button>
+                        <div class="flex justify-around items-center py-2 px-1 border-t border-white/[0.08] bg-[#121212] shrink-0">
+                            <button type="button" id="ocEditToolTpl" onclick="ocSetEditTool('template')" class="oc-edit-tool flex flex-col items-center gap-0.5 min-w-[56px] py-1 text-[#FF5028]">
+                                <i class="fa-solid fa-layer-group text-[20px]"></i><span class="text-[10px] font-medium">模版</span>
+                            </button>
+                            <button type="button" id="ocEditToolCut" onclick="ocSetEditTool('edit')" class="oc-edit-tool flex flex-col items-center gap-0.5 min-w-[56px] py-1 text-white/45">
+                                <i class="fa-solid fa-scissors text-[20px]"></i><span class="text-[10px] font-medium">剪辑</span>
+                            </button>
+                            <button type="button" id="ocEditToolMusic" onclick="ocSetEditTool('music')" class="oc-edit-tool flex flex-col items-center gap-0.5 min-w-[56px] py-1 text-white/45">
+                                <i class="fa-solid fa-music text-[20px]"></i><span class="text-[10px] font-medium">音乐</span>
+                            </button>
+                            <button type="button" id="ocEditToolText" onclick="ocSetEditTool('text')" class="oc-edit-tool flex flex-col items-center gap-0.5 min-w-[56px] py-1 text-white/45">
+                                <span class="text-[17px] font-black font-serif leading-none">T</span><span class="text-[10px] font-medium">文字·贴纸</span>
+                            </button>
+                            <button type="button" id="ocEditToolFx" onclick="ocSetEditTool('filter')" class="oc-edit-tool flex flex-col items-center gap-0.5 min-w-[56px] py-1 text-white/45">
+                                <i class="fa-solid fa-circle-half-stroke text-[20px]"></i><span class="text-[10px] font-medium">滤镜</span>
+                            </button>
+                        </div>
+                        <div class="px-3 pb-3 pt-1 shrink-0 bg-[#121212] border-t border-white/[0.06]">
+                            <button type="button" onclick="ocOpenAdvancedTimeline()" class="w-full py-2.5 rounded-xl bg-white/[0.06] text-[12px] font-semibold text-white/75 border border-white/[0.08] active:scale-[0.99] transition">进入完整时间轴剪辑</button>
                         </div>
                     </div>
                 </div>
@@ -4762,10 +4790,23 @@ document.addEventListener('click', function(e){
         { id: "football", label: "足球" },
         { id: "more", label: "更多" }
     ];
-    const OC_TEMPLATES_BB = [
-        { id: "bb-goal", title: "进球集锦 · 卡点", cover: "https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif" },
-        { id: "bb-moment", title: "高光瞬间 · 燃剪", cover: "https://media.giphy.com/media/l0MYd8bRkV6fJ4K1q/giphy.gif" },
-        { id: "bb-slow", title: "慢动作回放", cover: "https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif" }
+    const OC_HIGHLIGHT_CATEGORIES = [
+        { id: "rec", label: "推荐" },
+        { id: "goal", label: "进球时刻" },
+        { id: "fastbreak", label: "快攻反击" },
+        { id: "defense", label: "防守高光" },
+        { id: "train", label: "训练复盘" },
+        { id: "pano", label: "全景环绕" }
+    ];
+    const OC_HIGHLIGHT_TEMPLATES = [
+        { id: "h-goal-burst", title: "连进球 · 爆燃卡点", cover: "https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif", cats: ["rec", "goal"] },
+        { id: "h-buzzer", title: "压哨绝杀 · 慢放", cover: "https://media.giphy.com/media/l0MYd8bRkV6fJ4K1q/giphy.gif", cats: ["rec", "goal"] },
+        { id: "h-steal-run", title: "抢断 → 快攻一条龙", cover: "https://images.unsplash.com/photo-1519861531473-9200262188bf?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80", cats: ["rec", "fastbreak", "defense"] },
+        { id: "h-block", title: "封盖瞬间 · 张力", cover: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80", cats: ["defense", "rec"] },
+        { id: "h-drill", title: "训练重复镜 · 纠错向", cover: "https://images.unsplash.com/photo-1518611012118-696072aa579a?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80", cats: ["train", "rec"] },
+        { id: "h-pano-dunk", title: "篮下全景 · 扣篮跟拍", cover: "https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif", cats: ["pano", "goal", "rec"] },
+        { id: "h-pass-cut", title: "传导配合 · 无球跑动", cover: "https://images.unsplash.com/photo-1546519638-68e109498ffc?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80", cats: ["fastbreak", "train"] },
+        { id: "h-save", title: "门将扑救 · 足球", cover: "https://media.giphy.com/media/l0MYd8bRkV6fJ4K1q/giphy.gif", cats: ["goal", "defense", "rec"] }
     ];
     const OC_VIDEOS = [
         { id: "v1", title: "2026-04-01 14:59", meta: "150.2 MB · 本地相册", duration: "18:11", seconds: 1091, thumb: "https://images.unsplash.com/photo-1546519638-68e109498ffc?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80", source: "phone", type: "video", phoneAlbums: ["camera_roll", "videos"] },
@@ -4783,11 +4824,20 @@ document.addEventListener('click', function(e){
     let ocPhoneAlbumDropdownOpen = false;
     let ocSelected = new Set();
     let ocTemplateId = null;
+    let ocHighlightCategoryId = "rec";
+    let ocEditToolId = "template";
     let ocBgmIndex = 0;
     let ocSimulateFail = false;
 
+    function ocTemplatesForCategory() {
+        if (ocHighlightCategoryId === "rec") return OC_HIGHLIGHT_TEMPLATES.slice();
+        return OC_HIGHLIGHT_TEMPLATES.filter(function (t) {
+            return t.cats && t.cats.indexOf(ocHighlightCategoryId) >= 0;
+        });
+    }
+
     function ocCurrentTemplates() {
-        return OC_TEMPLATES_BB;
+        return ocTemplatesForCategory();
     }
 
     function ocFormatTotalSeconds(sec) {
@@ -5086,32 +5136,75 @@ document.addEventListener('click', function(e){
     }
 
     function ocFindTemplate(tid) {
-        var list = ocCurrentTemplates();
-        for (var i = 0; i < list.length; i++) {
-            if (list[i].id === tid) return list[i];
+        for (var i = 0; i < OC_HIGHLIGHT_TEMPLATES.length; i++) {
+            if (OC_HIGHLIGHT_TEMPLATES[i].id === tid) return OC_HIGHLIGHT_TEMPLATES[i];
         }
-        return list[0];
+        return OC_HIGHLIGHT_TEMPLATES[0];
+    }
+
+    function ocEnsureTemplateInFilter() {
+        var list = ocTemplatesForCategory();
+        if (list.length === 0) {
+            ocTemplateId = null;
+            return;
+        }
+        if (!ocTemplateId || !list.some(function (x) { return x.id === ocTemplateId; })) {
+            ocTemplateId = list[0].id;
+        }
     }
 
     window.ocRefreshEditStatus = function () {
         var line = document.getElementById("ocEditStatusLine");
         if (!line) return;
-        var t = ocFindTemplate(ocTemplateId);
-        line.textContent = "已选 " + ocSelected.size + " 段视频 · " + (t ? t.title : "智能成片") + " · 配乐 " + OC_BGMS[ocBgmIndex];
+        var t = ocTemplateId ? ocFindTemplate(ocTemplateId) : null;
+        var cat = OC_HIGHLIGHT_CATEGORIES.find(function (c) { return c.id === ocHighlightCategoryId; });
+        var catLabel = cat ? cat.label : "推荐";
+        line.textContent = "已选 " + ocSelected.size + " 段素材 · " + catLabel + " · " + (t ? t.title : "待选高光模版") + " · " + OC_BGMS[ocBgmIndex];
+        var bl = document.getElementById("ocBgmLabel");
+        if (bl) bl.textContent = " · " + OC_BGMS[ocBgmIndex];
+    };
+
+    window.ocRenderHighlightCategoryTabs = function () {
+        var host = document.getElementById("ocHighlightCategoryTabs");
+        if (!host) return;
+        host.innerHTML = "";
+        OC_HIGHLIGHT_CATEGORIES.forEach(function (c) {
+            var b = document.createElement("button");
+            b.type = "button";
+            b.className = "shrink-0 px-3 py-1.5 rounded-full text-[12px] font-bold border transition " + (c.id === ocHighlightCategoryId
+                ? "bg-white text-[#121212] border-white"
+                : "bg-transparent text-white/55 border-white/20");
+            b.textContent = c.label;
+            b.onclick = function () {
+                ocHighlightCategoryId = c.id;
+                ocEnsureTemplateInFilter();
+                window.ocRenderHighlightCategoryTabs();
+                window.ocRenderEditTemplateStrip();
+                window.ocRefreshEditStatus();
+            };
+            host.appendChild(b);
+        });
     };
 
     window.ocRenderEditTemplateStrip = function () {
         var strip = document.getElementById("ocEditTemplateStrip");
         if (!strip) return;
         strip.innerHTML = "";
-        ocCurrentTemplates().forEach(function (t) {
+        var more = document.createElement("button");
+        more.type = "button";
+        more.className = "flex-shrink-0 w-[100px] rounded-xl border border-dashed border-white/25 bg-white/[0.04] flex flex-col items-center justify-center gap-1 py-3 active:scale-[0.98] transition";
+        more.innerHTML = "<i class=\"fa-solid fa-border-all text-[22px] text-white/35\"></i><span class=\"text-[10px] font-bold text-white/45 text-center px-1 leading-tight\">更多<br>模版</span>";
+        more.onclick = function () { alert("运动模版库即将上线，可按项目/队伍定制高光脚本。"); };
+        strip.appendChild(more);
+        var list = ocTemplatesForCategory();
+        list.forEach(function (t) {
             var b = document.createElement("button");
             b.type = "button";
-            b.className = "flex-shrink-0 w-[108px] rounded-xl border overflow-hidden text-left transition active:scale-[0.98] " +
-                (t.id === ocTemplateId ? "border-[#FF5028]" : "border-white/10");
+            b.className = "flex-shrink-0 w-[108px] rounded-xl border overflow-hidden text-left transition active:scale-[0.98] shadow-sm " +
+                (t.id === ocTemplateId ? "border-[#FF5028] ring-1 ring-[#FF5028]/40" : "border-white/10");
             b.innerHTML = "<div class=\"relative w-full bg-neutral-800\" style=\"aspect-ratio:1/1\">" +
                 "<img src=\"" + t.cover + "\" class=\"w-full h-full object-cover\" alt=\"\"></div>" +
-                "<div class=\"p-2 bg-[#1e1e1e]\"><p class=\"text-[10px] font-bold text-white/90 truncate\">" + t.title + "</p></div>";
+                "<div class=\"p-2 bg-[#1e1e1e]\"><p class=\"text-[10px] font-bold text-white/90 leading-snug line-clamp-2\">" + t.title + "</p></div>";
             b.onclick = function () {
                 ocTemplateId = t.id;
                 window.ocRenderEditTemplateStrip();
@@ -5121,15 +5214,44 @@ document.addEventListener('click', function(e){
         });
     };
 
+    window.ocSetEditTool = function (tool) {
+        ocEditToolId = tool;
+        var tplPanel = document.getElementById("ocEditTemplatePanel");
+        var musPanel = document.getElementById("ocEditSubPanelMusic");
+        if (tplPanel) tplPanel.classList.toggle("hidden", tool !== "template");
+        if (musPanel) musPanel.classList.toggle("hidden", tool !== "music");
+        if (tool === "edit") {
+            alert("精细剪辑请在「完整时间轴」中操作（原型演示）。");
+        } else if (tool === "text") {
+            alert("文字与贴纸将在时间轴剪辑中提供（原型演示）。");
+        } else if (tool === "filter") {
+            alert("运动滤镜与 LUT 即将上线（原型演示）。");
+        }
+        document.querySelectorAll(".oc-edit-tool").forEach(function (el) {
+            var on = (tool === "template" && el.id === "ocEditToolTpl") ||
+                (tool === "edit" && el.id === "ocEditToolCut") ||
+                (tool === "music" && el.id === "ocEditToolMusic") ||
+                (tool === "text" && el.id === "ocEditToolText") ||
+                (tool === "filter" && el.id === "ocEditToolFx");
+            el.classList.toggle("text-[#FF5028]", on);
+            el.classList.toggle("text-white/45", !on);
+        });
+        if (tool === "music") window.ocRefreshEditStatus();
+    };
+
     window.ocCycleBgm = function () {
         ocBgmIndex = (ocBgmIndex + 1) % OC_BGMS.length;
         window.ocRefreshEditStatus();
     };
 
     window.ocEnterEditStep = function () {
-        ocTemplateId = ocCurrentTemplates()[0].id;
+        ocHighlightCategoryId = "rec";
+        ocEditToolId = "template";
+        ocEnsureTemplateInFilter();
+        window.ocRenderHighlightCategoryTabs();
         window.ocRenderEditTemplateStrip();
         window.ocRefreshEditStatus();
+        window.ocSetEditTool("template");
         window.ocShowStep("ocStepEdit");
     };
 
