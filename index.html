@@ -1951,21 +1951,31 @@
                 <div id="ocStepGallery" class="oneclick-step active bg-[#171718] text-white flex flex-col min-h-0">
                     <div class="relative z-20 flex items-center gap-2 px-3 pt-2 pb-2 shrink-0 border-b border-white/[0.08]">
                         <button type="button" onclick="closeOneClickFlow()" class="w-10 h-10 rounded-full flex items-center justify-center text-white/90 active:bg-white/10 shrink-0" aria-label="关闭"><i class="fa-solid fa-xmark text-lg"></i></button>
-                        <div class="flex-1 flex justify-around items-end min-w-0">
-                            <button type="button" id="ocSrcCamera" onclick="ocSetSourceTab('camera')" class="oc-src-tab flex flex-col items-center gap-1 pb-1 min-w-[72px] text-white/45">
-                                <i class="fa-solid fa-camera text-[20px]"></i><span class="text-[10px] font-medium scale-90">相机文件</span>
+                        <div class="flex-1 flex justify-around items-stretch min-w-0 pt-1 pb-0.5">
+                            <button type="button" id="ocSrcCamera" onclick="ocSetSourceTab('camera')" class="oc-src-tab flex flex-col items-center justify-end w-[76px] text-white/45">
+                                <span class="h-7 flex items-center justify-center shrink-0"><i class="fa-solid fa-camera text-[20px] leading-none"></i></span>
+                                <span class="min-h-[18px] flex items-center justify-center px-0.5 text-[10px] font-medium leading-tight text-center">相机文件</span>
+                                <span class="h-3 flex items-center justify-center shrink-0" aria-hidden="true"><span class="block w-2 h-2"></span></span>
                             </button>
-                            <button type="button" id="ocSrcDownloaded" onclick="ocSetSourceTab('downloaded')" class="oc-src-tab flex flex-col items-center gap-1 pb-1 min-w-[72px] text-white/45">
-                                <i class="fa-solid fa-download text-[20px]"></i><span class="text-[10px] font-medium scale-90">已下载</span>
+                            <button type="button" id="ocSrcDownloaded" onclick="ocSetSourceTab('downloaded')" class="oc-src-tab flex flex-col items-center justify-end w-[76px] text-white/45">
+                                <span class="h-7 flex items-center justify-center shrink-0"><i class="fa-solid fa-download text-[20px] leading-none"></i></span>
+                                <span class="min-h-[18px] flex items-center justify-center px-0.5 text-[10px] font-medium leading-tight text-center">已下载</span>
+                                <span class="h-3 flex items-center justify-center shrink-0" aria-hidden="true"><span class="block w-2 h-2"></span></span>
                             </button>
-                            <button type="button" id="ocSrcPhone" onclick="ocOnPhoneTabClick(event)" class="oc-src-tab flex flex-col items-center gap-1 pb-1 min-w-[72px] text-white/45">
-                                <i class="fa-solid fa-mobile-screen text-[20px]"></i><span class="text-[10px] font-medium scale-90">手机相册</span><i id="ocPhoneChevron" class="fa-solid fa-chevron-down text-[8px] opacity-60 -mt-0.5 transition-transform duration-200"></i>
+                            <button type="button" id="ocSrcPhone" onclick="ocOnPhoneTabClick(event)" class="oc-src-tab flex flex-col items-center justify-end w-[76px] text-white/45">
+                                <span class="h-7 flex items-center justify-center shrink-0"><i class="fa-solid fa-mobile-screen text-[20px] leading-none"></i></span>
+                                <span class="min-h-[18px] flex items-center justify-center px-0.5 text-[10px] font-medium leading-tight text-center">手机相册</span>
+                                <span class="h-3 flex items-center justify-center shrink-0"><i id="ocPhoneChevron" class="fa-solid fa-chevron-down text-[8px] opacity-60 transition-transform duration-200"></i></span>
                             </button>
                         </div>
                         <div id="ocPhoneAlbumDropdown" class="hidden absolute left-3 right-3 top-full mt-1 rounded-xl bg-[#2c2c2e] border border-white/[0.12] shadow-2xl max-h-[min(48vh,300px)] overflow-hidden flex flex-col">
                             <p class="px-4 pt-3 pb-1 text-[10px] text-white/40 uppercase tracking-wide shrink-0">相册</p>
                             <div id="ocPhoneAlbumList" class="overflow-y-auto no-scrollbar pb-2"></div>
                         </div>
+                    </div>
+                    <div id="ocCameraSportRow" class="hidden px-3 py-2 shrink-0 border-b border-white/[0.06] bg-[#1c1c1e]">
+                        <p class="text-[10px] text-white/35 mb-1.5">运动模式（相机录制）</p>
+                        <div id="ocCameraSportChips" class="flex flex-wrap gap-2"></div>
                     </div>
                     <div id="ocGalleryBody" class="flex-1 overflow-y-auto min-h-0 no-scrollbar relative bg-black">
                         <div id="ocCameraEmpty" class="hidden flex flex-col items-center justify-center py-16 px-8 text-center min-h-[280px]">
@@ -4730,8 +4740,12 @@ document.addEventListener('click', function(e){
     const OC_PHONE_ALBUMS = [
         { id: "recents", label: "最近项目" },
         { id: "camera_roll", label: "相机胶卷" },
-        { id: "videos", label: "视频" },
-        { id: "screenshots", label: "截屏" }
+        { id: "videos", label: "视频" }
+    ];
+    const OC_CAMERA_SPORTS = [
+        { id: "basketball", label: "篮球" },
+        { id: "football", label: "足球" },
+        { id: "more", label: "更多" }
     ];
     const OC_TEMPLATES_BB = [
         { id: "bb-goal", title: "进球集锦 · 卡点", cover: "https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif" },
@@ -4742,12 +4756,14 @@ document.addEventListener('click', function(e){
         { id: "v1", title: "2026-04-01 14:59", meta: "150.2 MB · 本地相册", duration: "18:11", seconds: 1091, thumb: "https://images.unsplash.com/photo-1546519638-68e109498ffc?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80", source: "phone", type: "video", phoneAlbums: ["camera_roll", "videos"] },
         { id: "v2", title: "训练对抗片段 A", meta: "82.4 MB · 本地相册", duration: "09:32", seconds: 572, thumb: "https://images.unsplash.com/photo-1519861531473-9200262188bf?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80", source: "phone", type: "video", phoneAlbums: ["videos"] },
         { id: "v3", title: "手机场边录制", meta: "210 MB · 本地相册", duration: "06:05", seconds: 365, thumb: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80", source: "phone", type: "video", phoneAlbums: ["camera_roll", "videos"] },
-        { id: "cam1", title: "相机场边 · 2026/03/28", meta: "Insta360", duration: "05:20", seconds: 320, thumb: "https://images.unsplash.com/photo-1518611012118-696072aa579a?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80", source: "camera", type: "video" },
+        { id: "cam1", title: "相机场边 · 篮球 · 2026/03/28", meta: "Insta360", duration: "05:20", seconds: 320, thumb: "https://images.unsplash.com/photo-1518611012118-696072aa579a?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80", source: "camera", type: "video", cameraSport: "basketball" },
+        { id: "cam2", title: "足球场边 · 2026/03/20", meta: "Insta360", duration: "08:42", seconds: 522, thumb: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80", source: "camera", type: "video", cameraSport: "football" },
         { id: "dl1", title: "已下载 · 训练录像", meta: "本地", duration: "12:04", seconds: 724, thumb: "https://images.unsplash.com/photo-1519861531473-9200262188bf?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80", source: "downloaded", type: "video" }
     ];
     const OC_BGMS = ["OUTSIDE", "Arena Pulse", "Street Hype", "Clean Win"];
 
     let ocSourceTab = "phone";
+    let ocCameraSportId = "basketball";
     let ocPhoneAlbumId = "recents";
     let ocPhoneAlbumDropdownOpen = false;
     let ocSelected = new Set();
@@ -4774,6 +4790,7 @@ document.addEventListener('click', function(e){
 
     window.openOneClickFlow = function () {
         ocSourceTab = "phone";
+        ocCameraSportId = "basketball";
         ocPhoneAlbumId = "recents";
         ocPhoneAlbumDropdownOpen = false;
         ocSelected = new Set();
@@ -4784,6 +4801,7 @@ document.addEventListener('click', function(e){
         if (df) df.checked = false;
         ocSyncSourceTabsUI();
         ocSyncPhoneDropdownUI();
+        ocSyncCameraSportRow();
         window.ocRenderGallery();
         window.ocShowStep("ocStepGallery");
         var m = document.getElementById("oneClickModal");
@@ -4810,8 +4828,44 @@ document.addEventListener('click', function(e){
         ocPhoneAlbumDropdownOpen = false;
         ocSyncSourceTabsUI();
         ocSyncPhoneDropdownUI();
+        ocSyncCameraSportRow();
         window.ocRenderGallery();
     };
+
+    function ocSyncCameraSportRow() {
+        var row = document.getElementById("ocCameraSportRow");
+        if (!row) return;
+        if (ocSourceTab === "camera") {
+            row.classList.remove("hidden");
+            ocRenderCameraSportChips();
+        } else {
+            row.classList.add("hidden");
+        }
+    }
+
+    function ocRenderCameraSportChips() {
+        var host = document.getElementById("ocCameraSportChips");
+        if (!host) return;
+        host.innerHTML = "";
+        OC_CAMERA_SPORTS.forEach(function (s) {
+            var b = document.createElement("button");
+            b.type = "button";
+            b.className = "px-3 py-1.5 rounded-full text-[11px] font-bold border transition " + (s.id === ocCameraSportId
+                ? "bg-[#f5c200] text-black border-[#f5c200]"
+                : "bg-white/[0.08] text-white/70 border-white/10");
+            b.textContent = s.label;
+            b.onclick = function () {
+                if (s.id === "more") {
+                    alert("更多运动模式即将上线");
+                    return;
+                }
+                ocCameraSportId = s.id;
+                ocRenderCameraSportChips();
+                window.ocRenderGallery();
+            };
+            host.appendChild(b);
+        });
+    }
 
     function ocCountForPhoneAlbum(albumId) {
         return OC_VIDEOS.filter(function (v) {
@@ -4862,6 +4916,7 @@ document.addEventListener('click', function(e){
         if (prev !== "phone") {
             ocSourceTab = "phone";
             ocSyncSourceTabsUI();
+            ocSyncCameraSportRow();
             ocPhoneAlbumDropdownOpen = false;
             window.ocRenderGallery();
         } else {
@@ -4871,6 +4926,7 @@ document.addEventListener('click', function(e){
     };
 
     window.ocSelectPhoneAlbum = function (id) {
+        if (!OC_PHONE_ALBUMS.some(function (a) { return a.id === id; })) return;
         ocPhoneAlbumId = id;
         ocPhoneAlbumDropdownOpen = false;
         ocSyncPhoneDropdownUI();
@@ -4892,6 +4948,9 @@ document.addEventListener('click', function(e){
         return OC_VIDEOS.filter(function (v) {
             if (v.type !== "video") return false;
             if (v.source !== ocSourceTab) return false;
+            if (ocSourceTab === "camera") {
+                if (v.cameraSport && v.cameraSport !== ocCameraSportId) return false;
+            }
             if (ocSourceTab === "phone" && ocPhoneAlbumId !== "recents") {
                 if (!v.phoneAlbums || v.phoneAlbums.indexOf(ocPhoneAlbumId) < 0) return false;
             }
@@ -4900,6 +4959,7 @@ document.addEventListener('click', function(e){
     }
 
     window.ocRenderGallery = function () {
+        if (!OC_PHONE_ALBUMS.some(function (a) { return a.id === ocPhoneAlbumId; })) ocPhoneAlbumId = "recents";
         var grid = document.getElementById("ocVideoGrid");
         var empty = document.getElementById("ocCameraEmpty");
         if (!grid) return;
@@ -4910,9 +4970,19 @@ document.addEventListener('click', function(e){
         var ea = document.getElementById("ocEmptyAction");
         if (ocSourceTab === "camera" && items.length === 0) {
             if (empty) empty.classList.remove("hidden");
-            if (et) et.textContent = "没有文件，请连接相机";
-            if (es) es.textContent = "连接后可预览并导入运动相机素材";
-            if (ea) { ea.textContent = "点击连接相机"; ea.classList.remove("hidden"); }
+            var hasAnyCamera = OC_VIDEOS.some(function (v) { return v.source === "camera" && v.type === "video"; });
+            var hasInThisSport = OC_VIDEOS.some(function (v) {
+                return v.source === "camera" && v.type === "video" && (!v.cameraSport || v.cameraSport === ocCameraSportId);
+            });
+            if (hasAnyCamera && !hasInThisSport) {
+                if (et) et.textContent = "当前运动模式下暂无视频";
+                if (es) es.textContent = "请切换上方篮球 / 足球";
+                if (ea) ea.classList.add("hidden");
+            } else {
+                if (et) et.textContent = "没有文件，请连接相机";
+                if (es) es.textContent = "连接后可预览并导入运动相机素材";
+                if (ea) { ea.textContent = "点击连接相机"; ea.classList.remove("hidden"); }
+            }
             grid.classList.add("hidden");
         } else if (ocSourceTab === "phone" && items.length === 0) {
             if (empty) empty.classList.remove("hidden");
