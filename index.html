@@ -2039,20 +2039,61 @@
                     </div>
                     <div class="flex-1 flex flex-col min-h-0 overflow-hidden bg-[#0a0a0a]">
                         <div class="flex-1 flex flex-col min-h-0 overflow-hidden">
-                            <div class="flex-1 flex items-center justify-center min-h-0 px-4 pt-3 pb-1">
+                            <div class="flex-1 flex items-center justify-center min-h-0 min-h-[100px] px-4 pt-3 pb-1">
                                 <div class="relative w-full max-w-[220px] aspect-[9/16] rounded-[14px] overflow-hidden bg-black shadow-[0_16px_48px_rgba(0,0,0,0.55)] ring-1 ring-white/[0.12]" style="isolation: isolate;">
                                     <img id="ocEditPreviewImg" src="https://images.unsplash.com/photo-1546519638-68e109498ffc?ixlib=rb-1.2.1&auto=format&fit=crop&w=960&q=80" class="block w-full h-full object-cover pointer-events-none select-none" alt="预览">
                                 </div>
                             </div>
-                            <div class="shrink-0 px-4 pb-2 pt-1">
+                            <div id="ocEditTemplateChrome" class="shrink-0 px-4 pb-2 pt-1">
                                 <div class="relative w-full h-2 rounded-full bg-white/[0.14] overflow-hidden touch-pan-x" id="ocEditSeekTrack" aria-label="时间轴">
                                     <div class="absolute left-0 top-0 bottom-0 w-[20%] rounded-full bg-gradient-to-r from-[#FF5028] to-[#ff7a52] shadow-[0_0_12px_rgba(255,80,40,0.35)]" id="ocEditPlayheadBar"></div>
                                 </div>
                                 <div class="flex items-center justify-between mt-2.5 gap-3">
-                                    <button type="button" class="w-10 h-10 rounded-full bg-white/[0.12] border border-white/[0.08] flex items-center justify-center text-white shrink-0 active:scale-95 transition" aria-label="播放/暂停" id="ocEditPlayBtn"><i class="fa-solid fa-play text-[13px] ml-0.5"></i></button>
+                                    <button type="button" class="w-10 h-10 rounded-full bg-white/[0.12] border border-white/[0.08] flex items-center justify-center text-white shrink-0 active:scale-95 transition" aria-label="播放/暂停" id="ocEditPlayBtn"><i class="fa-solid fa-play text-[13px] ml-0.5 oc-edit-play-icon"></i></button>
                                     <span class="text-[11px] text-white/65 tabular-nums font-semibold tracking-tight" id="ocTimelineTime">00:03 / 00:49</span>
                                 </div>
                                 <p id="ocEditStatusLine" class="text-[10px] text-white/38 mt-2 text-center leading-relaxed line-clamp-2"></p>
+                            </div>
+                            <div id="ocEditClipChrome" class="hidden flex-1 flex flex-col min-h-0 overflow-hidden border-t border-white/[0.06]">
+                                <div class="shrink-0 px-3 pt-2 pb-2 bg-[#0a0a0a]">
+                                    <div class="relative w-full h-1.5 rounded-full bg-white/[0.14] overflow-hidden" id="ocEditClipSeekTrack" aria-label="进度">
+                                        <div class="absolute left-0 top-0 bottom-0 w-[12%] rounded-full bg-gradient-to-r from-[#FF5028] to-[#ff7a52]" id="ocEditClipPlayheadBar"></div>
+                                    </div>
+                                    <div class="flex items-center justify-between mt-2 gap-2">
+                                        <button type="button" class="w-9 h-9 rounded-full bg-white/[0.12] border border-white/[0.08] flex items-center justify-center text-white shrink-0 active:scale-95 transition" aria-label="播放/暂停" id="ocEditClipPlayBtn"><i class="fa-solid fa-play text-[12px] ml-0.5 oc-edit-clip-play-icon"></i></button>
+                                        <span class="text-[11px] text-white/70 tabular-nums font-semibold tracking-tight flex-1 text-center" id="ocTimelineTimeClip">00:03 / 00:49</span>
+                                        <div class="flex items-center gap-0.5 shrink-0">
+                                            <button type="button" onclick="alert('撤销（原型）')" class="w-9 h-9 rounded-full flex items-center justify-center text-white/55 active:bg-white/10" aria-label="撤销"><i class="fa-solid fa-rotate-left text-[14px]"></i></button>
+                                            <button type="button" onclick="alert('重做（原型）')" class="w-9 h-9 rounded-full flex items-center justify-center text-white/55 active:bg-white/10" aria-label="重做"><i class="fa-solid fa-rotate-right text-[14px]"></i></button>
+                                            <button type="button" onclick="alert('全屏预览（原型）')" class="w-9 h-9 rounded-full flex items-center justify-center text-white/55 active:bg-white/10" aria-label="全屏"><i class="fa-solid fa-expand text-[13px]"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="ocEditTimelineArea" class="flex-1 flex flex-row min-h-[128px] max-h-[220px] bg-[#1c1c1e] shrink-0 border-t border-white/[0.08]">
+                                    <div class="flex flex-col items-center gap-1 pt-6 px-1 border-r border-white/[0.06] w-[42px] shrink-0">
+                                        <button type="button" id="ocEditMuteOrigBtn" class="flex flex-col items-center gap-0.5 text-white/45 active:opacity-80" aria-pressed="false" aria-label="关闭原声">
+                                            <i class="fa-solid fa-volume-high text-[15px]" id="ocEditMuteOrigIcon"></i>
+                                            <span class="text-[8px] leading-tight text-center text-white/35 w-8" id="ocEditMuteOrigLabel">原声</span>
+                                        </button>
+                                    </div>
+                                    <div class="flex-1 min-w-0 flex flex-col py-1.5 pr-2 pl-1">
+                                        <div id="ocEditTimelineRuler" class="h-5 shrink-0 flex flex-row items-end justify-between gap-1 overflow-hidden border-b border-white/[0.04] mb-1 w-full"></div>
+                                        <div class="relative flex-1 min-h-[76px]">
+                                            <div id="ocEditTimelineScroll" class="absolute inset-0 overflow-x-auto no-scrollbar flex items-end pb-0.5">
+                                                <div id="ocEditTimelineVideoRow" class="flex items-stretch gap-0.5 h-[72px] min-w-min pr-1"></div>
+                                            </div>
+                                            <div class="pointer-events-none absolute left-[28%] top-0 bottom-0 w-px bg-white/90 z-10 shadow-[0_0_8px_rgba(255,255,255,0.35)]" id="ocEditTimelinePlayheadLine" aria-hidden="true"></div>
+                                        </div>
+                                        <button type="button" id="ocEditTimelineAddAudioBtn" class="mt-1.5 w-full py-2 rounded-xl border border-dashed border-white/20 text-[11px] font-medium text-white/50 active:bg-white/[0.04]">+ 添加音频</button>
+                                    </div>
+                                </div>
+                                <div id="ocEditClipSegmentActions" class="shrink-0 px-3 py-2 bg-[#161616] border-t border-white/[0.08]">
+                                    <p class="text-[10px] text-white/40 mb-1.5" id="ocEditClipSegHint">点击时间轴上的片段进行截取、替换等操作</p>
+                                    <div id="ocEditClipSegBar" class="hidden flex flex-col gap-2">
+                                        <p class="text-[11px] font-bold text-white/90 truncate" id="ocEditClipSegTitle">片段</p>
+                                        <div class="flex flex-wrap gap-1.5" id="ocEditClipSegPills"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div id="ocEditTemplatePanel" class="shrink-0 bg-[#161616] border-t border-white/[0.08]">
@@ -2066,13 +2107,6 @@
                         <div id="ocEditSubPanelMusic" class="hidden shrink-0 bg-[#161616] border-t border-white/[0.08] px-4 py-4">
                             <p class="text-[13px] font-semibold text-white/90 mb-2">配乐</p>
                             <button type="button" onclick="ocCycleBgm()" class="w-full py-3 rounded-xl bg-white/[0.06] text-[13px] text-white/85 border border-white/10 active:scale-[0.99] transition">切换配乐（演示）<span id="ocBgmLabel" class="text-white/50"></span></button>
-                        </div>
-                        <div id="ocEditSubPanelClips" class="hidden shrink-0 bg-[#161616] border-t border-white/[0.08] flex flex-col min-h-0 max-h-[38vh]">
-                            <div class="px-3 pt-2.5 pb-2 border-b border-white/[0.06] shrink-0">
-                                <p class="text-[12px] font-bold text-white/90">拼接片段</p>
-                                <p class="text-[10px] text-white/38 mt-0.5">按顺序展示成片中的每段素材，可截取、替换、调音量与加字</p>
-                            </div>
-                            <div id="ocEditClipList" class="flex-1 overflow-y-auto no-scrollbar px-3 py-2 space-y-2 min-h-0"></div>
                         </div>
                         <div class="flex justify-around items-center py-2 px-1 border-t border-white/[0.08] bg-[#121212] shrink-0">
                             <button type="button" id="ocEditToolTpl" onclick="ocSetEditTool('template')" class="oc-edit-tool flex flex-col items-center gap-0.5 min-w-[56px] py-1 text-[#FF5028]">
@@ -4827,6 +4861,9 @@ document.addEventListener('click', function(e){
     let ocTemplateId = null;
     let ocHighlightCategoryId = "rec";
     let ocEditToolId = "template";
+    let ocEditPlaying = false;
+    let ocEditMuteOrigOff = false;
+    let ocTimelineSelectedSeg = null;
     let ocBgmIndex = 0;
     let ocSimulateFail = false;
 
@@ -5248,8 +5285,11 @@ document.addEventListener('click', function(e){
         segs.forEach(function (s) { totalSec += s.seconds || 0; });
         if (totalSec < 1) totalSec = 49;
         var cur = 3;
+        var txt = ocFormatTotalSeconds(cur) + " / " + ocFormatTotalSeconds(totalSec);
         var tEl = document.getElementById("ocTimelineTime");
-        if (tEl) tEl.textContent = ocFormatTotalSeconds(cur) + " / " + ocFormatTotalSeconds(totalSec);
+        if (tEl) tEl.textContent = txt;
+        var tEl2 = document.getElementById("ocTimelineTimeClip");
+        if (tEl2) tEl2.textContent = txt;
     }
 
     window.ocClipSegmentAction = function (act, seg) {
@@ -5263,77 +5303,175 @@ document.addEventListener('click', function(e){
         alert(msg[act] || act);
     };
 
-    window.ocRenderClipSegmentsPanel = function () {
-        var host = document.getElementById("ocEditClipList");
-        if (!host) return;
-        host.innerHTML = "";
+    window.ocToggleEditPlay = function () {
+        ocEditPlaying = !ocEditPlaying;
+        var i1 = document.querySelector("#ocEditPlayBtn .oc-edit-play-icon");
+        var i2 = document.querySelector("#ocEditClipPlayBtn .oc-edit-clip-play-icon");
+        if (i1) {
+            i1.className = ocEditPlaying
+                ? "fa-solid fa-pause text-[13px] oc-edit-play-icon"
+                : "fa-solid fa-play text-[13px] ml-0.5 oc-edit-play-icon";
+        }
+        if (i2) {
+            i2.className = ocEditPlaying
+                ? "fa-solid fa-pause text-[12px] oc-edit-clip-play-icon"
+                : "fa-solid fa-play text-[12px] ml-0.5 oc-edit-clip-play-icon";
+        }
+    };
+
+    function ocSelectTimelineSegment(seg) {
+        ocTimelineSelectedSeg = seg;
+        var hint = document.getElementById("ocEditClipSegHint");
+        var bar = document.getElementById("ocEditClipSegBar");
+        var titleEl = document.getElementById("ocEditClipSegTitle");
+        var pills = document.getElementById("ocEditClipSegPills");
+        if (!seg) {
+            if (hint) hint.classList.remove("hidden");
+            if (bar) bar.classList.add("hidden");
+            document.querySelectorAll(".oc-timeline-clip").forEach(function (n) {
+                n.classList.remove("ring-2", "ring-[#FF5028]", "ring-offset-1", "ring-offset-[#1c1c1e]");
+            });
+            return;
+        }
+        var p = document.getElementById("ocEditPreviewImg");
+        if (p && seg.thumb) p.src = seg.thumb;
+        if (hint) hint.classList.add("hidden");
+        if (bar) bar.classList.remove("hidden");
+        if (titleEl) titleEl.textContent = "片段 " + seg.idx + " · " + (seg.title || "");
+        if (pills) {
+            pills.innerHTML = "";
+            function pill(label, act) {
+                var b = document.createElement("button");
+                b.type = "button";
+                b.className = "px-2.5 py-1.5 rounded-full bg-white/[0.08] text-[10px] font-semibold text-white/90 border border-white/[0.1] active:scale-[0.98] transition";
+                b.textContent = label;
+                b.onclick = function () { window.ocClipSegmentAction(act, seg); };
+                return b;
+            }
+            pills.appendChild(pill("截取", "trim"));
+            pills.appendChild(pill("替换", "replace"));
+            pills.appendChild(pill("音量", "volume"));
+            pills.appendChild(pill("文字", "caption"));
+        }
+        document.querySelectorAll(".oc-timeline-clip").forEach(function (n) {
+            var on = n.getAttribute("data-oc-seg-id") === seg.id;
+            n.classList.toggle("ring-2", on);
+            n.classList.toggle("ring-[#FF5028]", on);
+            n.classList.toggle("ring-offset-1", on);
+            n.classList.toggle("ring-offset-[#1c1c1e]", on);
+        });
+    }
+
+    window.ocRenderTimelineTrack = function () {
+        var ruler = document.getElementById("ocEditTimelineRuler");
+        var row = document.getElementById("ocEditTimelineVideoRow");
+        if (!ruler || !row) return;
+        ruler.innerHTML = "";
+        row.innerHTML = "";
         var segs = ocBuildEditSegments();
+        var totalSec = 0;
+        segs.forEach(function (s) { totalSec += s.seconds || 0; });
+        if (totalSec < 1) totalSec = 15;
+        var step = 2;
+        var tickCount = Math.floor(totalSec / step) + 1;
+        for (var k = 0; k < tickCount; k++) {
+            var t = Math.min(k * step, totalSec);
+            var d = document.createElement("div");
+            d.className = "shrink-0 text-[8px] text-white/40 tabular-nums leading-none pb-0.5";
+            d.textContent = ocFormatTotalSeconds(t);
+            ruler.appendChild(d);
+        }
         segs.forEach(function (s) {
-            var row = document.createElement("div");
-            row.className = "rounded-xl bg-white/[0.04] border border-white/[0.08] p-2.5 flex gap-2.5 items-stretch";
-            var thumbBtn = document.createElement("button");
-            thumbBtn.type = "button";
-            thumbBtn.className = "relative w-[52px] h-[72px] rounded-lg overflow-hidden shrink-0 ring-1 ring-white/10 active:opacity-85 transition";
+            var sec = s.seconds || 1;
+            var w = Math.round(Math.max(40, Math.min(120, (sec / totalSec) * 220)));
+            var btn = document.createElement("button");
+            btn.type = "button";
+            btn.setAttribute("data-oc-seg-id", s.id);
+            btn.className = "oc-timeline-clip relative h-full rounded-md overflow-hidden shrink-0 border border-white/15 bg-neutral-900 active:opacity-90 transition";
+            btn.style.width = w + "px";
             var im = document.createElement("img");
             im.src = s.thumb;
             im.className = "w-full h-full object-cover pointer-events-none";
             im.alt = "";
-            thumbBtn.appendChild(im);
-            thumbBtn.onclick = function () {
-                var p = document.getElementById("ocEditPreviewImg");
-                if (p) p.src = s.thumb;
-            };
-            var right = document.createElement("div");
-            right.className = "flex-1 min-w-0 flex flex-col justify-center py-0.5";
-            var t1 = document.createElement("p");
-            t1.className = "text-[12px] font-bold text-white/92";
-            t1.textContent = "片段 " + s.idx;
-            var t2 = document.createElement("p");
-            t2.className = "text-[10px] text-white/42 truncate mt-0.5";
-            t2.textContent = s.title;
-            var t3 = document.createElement("p");
-            t3.className = "text-[10px] text-white/32 mt-0.5";
-            t3.textContent = "时长 " + s.duration;
-            var actions = document.createElement("div");
-            actions.className = "flex flex-wrap gap-1.5 mt-2";
-            function pill(label, act) {
-                var b = document.createElement("button");
-                b.type = "button";
-                b.className = "px-2 py-1 rounded-full bg-white/[0.07] text-[10px] font-semibold text-white/88 border border-white/[0.08] active:scale-[0.98] transition";
-                b.textContent = label;
-                b.onclick = function () { window.ocClipSegmentAction(act, s); };
-                return b;
-            }
-            actions.appendChild(pill("截取", "trim"));
-            actions.appendChild(pill("替换", "replace"));
-            actions.appendChild(pill("音量", "volume"));
-            actions.appendChild(pill("文字", "caption"));
-            right.appendChild(t1);
-            right.appendChild(t2);
-            right.appendChild(t3);
-            right.appendChild(actions);
-            row.appendChild(thumbBtn);
-            row.appendChild(right);
-            host.appendChild(row);
+            btn.appendChild(im);
+            var cap = document.createElement("div");
+            cap.className = "absolute bottom-0 inset-x-0 py-0.5 px-0.5 bg-black/55 text-[7px] text-white/80 tabular-nums text-center truncate";
+            cap.textContent = s.duration || "";
+            btn.appendChild(cap);
+            (function (seg) {
+                btn.onclick = function () { ocSelectTimelineSegment(seg); };
+            })(s);
+            row.appendChild(btn);
         });
+        var addBtn = document.createElement("button");
+        addBtn.type = "button";
+        addBtn.className = "h-full w-11 shrink-0 rounded-lg border border-dashed border-white/30 bg-white/[0.06] flex items-center justify-center text-white/55 text-lg active:bg-white/10";
+        addBtn.setAttribute("aria-label", "添加片段");
+        addBtn.innerHTML = "<i class=\"fa-solid fa-plus text-[16px]\"></i>";
+        addBtn.onclick = function () { alert("从相册或相机追加片段（原型）"); };
+        row.appendChild(addBtn);
+        if (segs.length) ocSelectTimelineSegment(segs[0]);
+        else ocSelectTimelineSegment(null);
         ocUpdateEditTimelineDisplay();
     };
 
-    window.ocSetEditTool = function (tool) {
-        ocEditToolId = tool;
-        var tplPanel = document.getElementById("ocEditTemplatePanel");
-        var musPanel = document.getElementById("ocEditSubPanelMusic");
-        var clipsPanel = document.getElementById("ocEditSubPanelClips");
-        if (tplPanel) tplPanel.classList.toggle("hidden", tool !== "template");
-        if (musPanel) musPanel.classList.toggle("hidden", tool !== "music");
-        if (clipsPanel) {
-            clipsPanel.classList.toggle("hidden", tool !== "edit");
-            if (tool === "edit") window.ocRenderClipSegmentsPanel();
+    window.ocBindOneClickEditControls = function () {
+        var mute = document.getElementById("ocEditMuteOrigBtn");
+        if (mute && !mute.dataset.ocBound) {
+            mute.dataset.ocBound = "1";
+            mute.addEventListener("click", function () {
+                ocEditMuteOrigOff = !ocEditMuteOrigOff;
+                var icon = document.getElementById("ocEditMuteOrigIcon");
+                var label = document.getElementById("ocEditMuteOrigLabel");
+                if (icon) {
+                    icon.className = "fa-solid " + (ocEditMuteOrigOff ? "fa-volume-xmark" : "fa-volume-high") + " text-[15px]";
+                }
+                if (label) label.textContent = ocEditMuteOrigOff ? "已关" : "原声";
+                mute.setAttribute("aria-pressed", ocEditMuteOrigOff ? "true" : "false");
+            });
         }
+        var addAud = document.getElementById("ocEditTimelineAddAudioBtn");
+        if (addAud && !addAud.dataset.ocBound) {
+            addAud.dataset.ocBound = "1";
+            addAud.addEventListener("click", function () { window.ocSetEditTool("music"); });
+        }
+        var pb = document.getElementById("ocEditPlayBtn");
+        if (pb && !pb.dataset.ocBound) {
+            pb.dataset.ocBound = "1";
+            pb.addEventListener("click", window.ocToggleEditPlay);
+        }
+        var pb2 = document.getElementById("ocEditClipPlayBtn");
+        if (pb2 && !pb2.dataset.ocBound) {
+            pb2.dataset.ocBound = "1";
+            pb2.addEventListener("click", window.ocToggleEditPlay);
+        }
+    };
+
+    window.ocSetEditTool = function (tool) {
         if (tool === "text") {
             alert("文字与贴纸可在「剪辑」中按片段添加，或后续在时间轴中统一调整（原型演示）。");
-        } else if (tool === "filter") {
+            return;
+        }
+        if (tool === "filter") {
             alert("运动滤镜与 LUT 即将上线（原型演示）。");
+            return;
+        }
+        ocEditToolId = tool;
+        var tplChrome = document.getElementById("ocEditTemplateChrome");
+        var clipChrome = document.getElementById("ocEditClipChrome");
+        var tplPanel = document.getElementById("ocEditTemplatePanel");
+        var musPanel = document.getElementById("ocEditSubPanelMusic");
+        if (tool === "edit") {
+            if (tplChrome) tplChrome.classList.add("hidden");
+            if (clipChrome) clipChrome.classList.remove("hidden");
+            if (tplPanel) tplPanel.classList.add("hidden");
+            if (musPanel) musPanel.classList.add("hidden");
+            window.ocRenderTimelineTrack();
+        } else {
+            if (tplChrome) tplChrome.classList.remove("hidden");
+            if (clipChrome) clipChrome.classList.add("hidden");
+            if (tplPanel) tplPanel.classList.toggle("hidden", tool !== "template");
+            if (musPanel) musPanel.classList.toggle("hidden", tool !== "music");
         }
         document.querySelectorAll(".oc-edit-tool").forEach(function (el) {
             var on = (tool === "template" && el.id === "ocEditToolTpl") ||
@@ -5362,6 +5500,7 @@ document.addEventListener('click', function(e){
         window.ocRefreshEditStatus();
         ocUpdateEditTimelineDisplay();
         window.ocSetEditTool("template");
+        window.ocBindOneClickEditControls();
         window.ocShowStep("ocStepEdit");
     };
 
