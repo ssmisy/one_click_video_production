@@ -2147,7 +2147,7 @@
                                     <button type="button" onclick="alert('从视频中提取音乐（原型）')" class="shrink-0 px-2.5 py-2 rounded-xl bg-white/[0.06] text-[10px] font-medium text-white/80 border border-white/[0.06] active:scale-[0.98]">提取音乐</button>
                                 </div>
                             </div>
-                            <div class="flex items-stretch py-2 px-2 gap-1 min-h-[52px] border-b border-white/[0.06]">
+                            <div id="ocEditMusicToolsRow" class="hidden flex items-stretch py-2 px-2 gap-1 min-h-[52px] border-b border-white/[0.06]">
                                 <div id="ocEditMusicBottomTools" class="flex-1 min-w-0 flex flex-nowrap items-center justify-start gap-1 overflow-x-auto no-scrollbar py-0.5"></div>
                             </div>
                             <div class="flex justify-end items-center py-2.5 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
@@ -5460,8 +5460,10 @@ document.addEventListener('click', function(e){
     function ocSelectMusicTrack(sel) {
         ocMusicTimelineSelected = !!sel;
         var hint = document.getElementById("ocEditMusicSegHint");
+        var toolsRow = document.getElementById("ocEditMusicToolsRow");
         if (!sel) {
             if (hint) hint.classList.remove("hidden");
+            if (toolsRow) toolsRow.classList.add("hidden");
             window.ocRenderMusicBottomTools(null);
             document.querySelectorAll(".oc-music-audio-clip").forEach(function (n) {
                 n.classList.remove("ring-2", "ring-violet-400", "ring-offset-1", "ring-offset-[#161616]");
@@ -5469,6 +5471,7 @@ document.addEventListener('click', function(e){
             return;
         }
         if (hint) hint.classList.add("hidden");
+        if (toolsRow) toolsRow.classList.remove("hidden");
         var meta = { id: "oc-bgm", title: OC_BGMS[ocBgmIndex] };
         window.ocRenderMusicBottomTools(meta);
         document.querySelectorAll(".oc-music-audio-clip").forEach(function (n) {
@@ -5502,7 +5505,8 @@ document.addEventListener('click', function(e){
         ab.innerHTML = "<i class=\"fa-solid fa-music text-violet-300 text-[14px] mr-2 shrink-0\"></i><span class=\"text-[11px] font-semibold text-white/90 truncate\">" + label + "</span>";
         ab.onclick = function () { ocSelectMusicTrack(true); };
         arow.appendChild(ab);
-        ocSelectMusicTrack(true);
+        if (ocMusicTimelineSelected) ocSelectMusicTrack(true);
+        else ocSelectMusicTrack(false);
         ocUpdateEditTimelineDisplay();
     };
 
@@ -5628,6 +5632,7 @@ document.addEventListener('click', function(e){
             if (mainBar) mainBar.classList.add("hidden");
             if (clipBar) clipBar.classList.add("hidden");
             if (musicBar) musicBar.classList.remove("hidden");
+            ocMusicTimelineSelected = false;
             window.ocRenderMusicTimelineTrack();
         } else {
             if (tplChrome) tplChrome.classList.remove("hidden");
