@@ -70,9 +70,18 @@
         .page-view { display: block; }
         .page-view.hidden { display: none !important; }
 
-        /* AI 一键成片：步骤切换 */
-        .oneclick-step { display: none; flex-direction: column; height: 100%; min-height: 0; }
-        .oneclick-step.active { display: flex; }
+        /* AI 一键成片：步骤切换（须压过 Tailwind .flex，否则会与非 active 步骤叠成半屏） */
+        #oneClickRoot { position: relative; }
+        .oneclick-step {
+            display: none !important;
+            flex: 1 1 0%;
+            min-height: 0;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .oneclick-step.active {
+            display: flex !important;
+        }
 
         .manual-preview-frame { position: relative; }
         .manual-preview-bg {
@@ -1948,7 +1957,7 @@
         <!-- ========== AI 一键成片 ========== -->
         <div id="oneClickModal" class="absolute inset-0 z-50 flex flex-col bg-[#171718] opacity-0 pointer-events-none translate-y-full transition-transform duration-300">
             <div class="flex-1 flex flex-col min-h-0" id="oneClickRoot">
-                <div id="ocStepGallery" class="oneclick-step active bg-[#171718] text-white flex flex-col min-h-0">
+                <div id="ocStepGallery" class="oneclick-step active bg-[#171718] text-white min-h-0">
                     <div class="relative z-20 flex items-center gap-2 px-3 pt-2 pb-2 shrink-0 border-b border-white/[0.08]">
                         <button type="button" onclick="closeOneClickFlow()" class="w-10 h-10 rounded-full flex items-center justify-center text-white/90 active:bg-white/10 shrink-0" aria-label="关闭"><i class="fa-solid fa-xmark text-lg"></i></button>
                         <div class="flex-1 flex justify-around items-stretch min-w-0 pt-1 pb-0.5">
@@ -2000,8 +2009,8 @@
                         </div>
                     </div>
                 </div>
-                <div id="ocStepLoading" class="oneclick-step bg-white">
-                    <div class="flex-1 flex flex-col items-center justify-center px-6 pb-16">
+                <div id="ocStepLoading" class="oneclick-step bg-white min-h-0">
+                    <div class="flex-1 flex flex-col items-center justify-center px-6 pb-16 min-h-0">
                         <div class="w-24 h-24 rounded-[24px] bg-gray-50 flex items-center justify-center mb-6 shadow-sm border border-gray-100">
                             <i class="fa-solid fa-hourglass-half text-4xl text-[#FF5028] animate-pulse"></i>
                         </div>
@@ -2013,7 +2022,7 @@
                         <p class="text-[11px] text-gray-400 mt-3" id="ocProgressText">准备中</p>
                     </div>
                 </div>
-                <div id="ocStepEdit" class="oneclick-step bg-[#121212] text-white">
+                <div id="ocStepEdit" class="oneclick-step bg-[#121212] text-white min-h-0">
                     <div class="flex items-center justify-between px-3 py-2.5 border-b border-white/[0.08] shrink-0 bg-[#121212]">
                         <button type="button" onclick="closeOneClickFlow()" class="w-10 h-10 rounded-full bg-white/[0.08] flex items-center justify-center text-white/90 active:scale-95" aria-label="关闭"><i class="fa-solid fa-chevron-left text-[15px]"></i></button>
                         <span class="text-[15px] font-semibold text-white/95">成片编辑</span>
@@ -2049,8 +2058,8 @@
                         </div>
                     </div>
                 </div>
-                <div id="ocStepExporting" class="oneclick-step bg-[#121212] text-white">
-                    <div class="flex-1 flex flex-col items-center justify-center px-6">
+                <div id="ocStepExporting" class="oneclick-step bg-[#121212] text-white min-h-0">
+                    <div class="flex-1 flex flex-col items-center justify-center px-6 min-h-0">
                         <i class="fa-solid fa-circle-notch fa-spin text-4xl text-[#FF5028] mb-6"></i>
                         <h3 class="text-[17px] font-bold mb-2">正在导出…</h3>
                         <p class="text-[13px] text-white/50 text-center">合成最终成片 · 请稍候</p>
@@ -2059,8 +2068,8 @@
                         </div>
                     </div>
                 </div>
-                <div id="ocStepExportDone" class="oneclick-step bg-white">
-                    <div class="flex-1 flex flex-col items-center px-6 pt-14 pb-8">
+                <div id="ocStepExportDone" class="oneclick-step bg-white min-h-0">
+                    <div class="flex-1 flex flex-col items-center px-6 pt-14 pb-8 min-h-0">
                         <div class="w-20 h-20 bg-emerald-50 text-emerald-500 rounded-full flex items-center justify-center text-3xl mb-5 border border-emerald-100"><i class="fa-solid fa-check"></i></div>
                         <h3 class="text-xl font-bold text-gray-900 mb-2 text-center">导出完成</h3>
                         <p class="text-sm text-gray-500 text-center mb-8">已保存至相册（原型）</p>
@@ -2074,8 +2083,8 @@
                         </div>
                     </div>
                 </div>
-                <div id="ocStepFail" class="oneclick-step bg-white">
-                    <div class="flex-1 flex flex-col items-center justify-center px-6 pb-10">
+                <div id="ocStepFail" class="oneclick-step bg-white min-h-0">
+                    <div class="flex-1 flex flex-col items-center justify-center px-6 pb-10 min-h-0">
                         <div class="w-[72px] h-[72px] bg-orange-50 text-orange-500 rounded-full flex items-center justify-center text-4xl mb-6"><i class="fa-solid fa-triangle-exclamation"></i></div>
                         <h3 class="text-xl font-bold text-gray-900 mb-2 text-center">未识别到可用高光</h3>
                         <p class="text-sm text-gray-500 mb-8 text-center">画面遮挡或素材过短时，AI 可能无法自动成片。</p>
