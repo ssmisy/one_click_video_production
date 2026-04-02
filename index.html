@@ -1946,26 +1946,60 @@
             </div>
         </div>
         <!-- ========== AI 一键成片（篮球 MVP） ========== -->
-        <div id="oneClickModal" class="absolute inset-0 z-50 flex flex-col bg-white opacity-0 pointer-events-none translate-y-full transition-transform duration-300">
+        <div id="oneClickModal" class="absolute inset-0 z-50 flex flex-col bg-[#171718] opacity-0 pointer-events-none translate-y-full transition-transform duration-300">
             <div class="flex-1 flex flex-col min-h-0" id="oneClickRoot">
-                <div id="ocStepGallery" class="oneclick-step active">
-                    <div class="flex items-center justify-between px-5 py-3 bg-white/95 backdrop-blur border-b border-gray-100 shrink-0">
-                        <button type="button" onclick="closeOneClickFlow()" class="text-gray-700 p-2 -ml-2" aria-label="返回"><i class="fa-solid fa-chevron-left text-lg"></i></button>
-                        <h3 class="text-black font-semibold text-base">选择素材</h3>
-                        <div class="w-8"></div>
+                <div id="ocStepGallery" class="oneclick-step active bg-[#171718] text-white flex flex-col min-h-0">
+                    <div class="flex items-center gap-2 px-3 pt-2 pb-2 shrink-0 border-b border-white/[0.08]">
+                        <button type="button" onclick="closeOneClickFlow()" class="w-10 h-10 rounded-full flex items-center justify-center text-white/90 active:bg-white/10 shrink-0" aria-label="关闭"><i class="fa-solid fa-xmark text-lg"></i></button>
+                        <div class="flex-1 flex justify-around items-end min-w-0">
+                            <button type="button" id="ocSrcCamera" onclick="ocSetSourceTab('camera')" class="oc-src-tab flex flex-col items-center gap-1 pb-1 min-w-[72px] text-white/45">
+                                <i class="fa-solid fa-camera text-[20px]"></i><span class="text-[10px] font-medium scale-90">相机文件</span>
+                            </button>
+                            <button type="button" id="ocSrcDownloaded" onclick="ocSetSourceTab('downloaded')" class="oc-src-tab flex flex-col items-center gap-1 pb-1 min-w-[72px] text-white/45">
+                                <i class="fa-solid fa-download text-[20px]"></i><span class="text-[10px] font-medium scale-90">已下载</span>
+                            </button>
+                            <button type="button" id="ocSrcPhone" onclick="ocSetSourceTab('phone')" class="oc-src-tab flex flex-col items-center gap-1 pb-1 min-w-[72px] text-white/45">
+                                <i class="fa-solid fa-mobile-screen text-[20px]"></i><span class="text-[10px] font-medium scale-90">手机相册</span><i class="fa-solid fa-chevron-down text-[8px] opacity-60 -mt-0.5"></i>
+                            </button>
+                        </div>
                     </div>
-                    <div class="px-5 pt-3 pb-2 space-y-3 shrink-0">
-                        <p class="text-[11px] text-gray-400">篮球场景</p>
+                    <div class="px-3 py-2 shrink-0 border-b border-white/[0.06] bg-[#1c1c1e]">
+                        <p class="text-[10px] text-white/35 uppercase tracking-wide mb-1.5">一键成片 · 运动</p>
+                        <div id="ocSportChips" class="flex flex-wrap gap-2"></div>
+                    </div>
+                    <div id="ocSceneRow" class="px-3 py-2 shrink-0 border-b border-white/[0.06] bg-[#1c1c1e]">
+                        <p class="text-[10px] text-white/35 mb-1.5">场景（可选）</p>
                         <div id="ocSceneChips" class="flex flex-wrap gap-2"></div>
-                        <p class="text-[11px] text-gray-400 leading-relaxed">从相册自由选择一条或多条视频，点击下方一键生成。</p>
                     </div>
-                    <div id="ocVideoList" class="flex flex-col gap-3 overflow-y-auto flex-1 min-h-0 no-scrollbar px-5 pb-4"></div>
-                    <div class="shrink-0 bg-white border-t border-gray-100 p-5 space-y-3 shadow-[0_-10px_20px_rgba(0,0,0,0.02)]">
-                        <label class="flex items-center gap-2 text-[11px] text-gray-400 px-0.5">
-                            <input id="ocDemoFail" type="checkbox" class="accent-gray-500 w-4 h-4">
+                    <div class="flex items-center px-3 py-2 shrink-0 border-b border-white/[0.08] gap-2">
+                        <div class="flex gap-5 flex-1 overflow-x-auto no-scrollbar">
+                            <button type="button" id="ocMediaAll" onclick="ocSetMediaFilter('all')" class="oc-media-tab text-[14px] font-semibold text-white/90 pb-1 border-b-2 border-[#f5c200] whitespace-nowrap">全部</button>
+                            <button type="button" id="ocMediaVideo" onclick="ocSetMediaFilter('video')" class="oc-media-tab text-[14px] font-semibold text-white/40 pb-1 border-b-2 border-transparent whitespace-nowrap">视频</button>
+                            <button type="button" id="ocMediaPhoto" onclick="ocSetMediaFilter('photo')" class="oc-media-tab text-[14px] font-semibold text-white/40 pb-1 border-b-2 border-transparent whitespace-nowrap">照片</button>
+                        </div>
+                        <button type="button" class="w-9 h-9 rounded-full flex items-center justify-center text-white/50 active:bg-white/10 shrink-0" aria-label="筛选"><i class="fa-solid fa-filter"></i></button>
+                    </div>
+                    <div id="ocGalleryBody" class="flex-1 overflow-y-auto min-h-0 no-scrollbar relative bg-black">
+                        <div id="ocCameraEmpty" class="hidden flex flex-col items-center justify-center py-16 px-8 text-center min-h-[280px]">
+                            <div class="w-20 h-20 rounded-2xl bg-white/[0.06] flex items-center justify-center mb-5 text-white/30"><i class="fa-solid fa-folder-open text-4xl"></i></div>
+                            <p class="text-[15px] text-white/75 font-medium mb-1">没有文件，请连接相机</p>
+                            <p class="text-[12px] text-white/40 mb-6">连接后可预览并导入运动相机素材</p>
+                            <button type="button" class="px-8 py-3 rounded-full bg-[#f5c200] text-black text-[14px] font-bold active:scale-[0.98] transition">点击连接相机</button>
+                        </div>
+                        <div id="ocVideoGrid" class="grid grid-cols-3 gap-[3px] p-[3px]"></div>
+                    </div>
+                    <div class="shrink-0 bg-[#2c2c2e]/95 backdrop-blur-md border-t border-white/[0.08] px-3 pt-2 pb-3">
+                        <label class="flex items-center gap-2 text-[10px] text-white/35 mb-2 px-0.5">
+                            <input id="ocDemoFail" type="checkbox" class="accent-amber-400 w-3.5 h-3.5 rounded">
                             <span>演示：模拟生成失败</span>
                         </label>
-                        <button type="button" id="ocBtnGenerate" disabled onclick="ocStartGenerate()" class="w-full bg-gray-200 text-gray-400 font-bold py-3.5 rounded-xl text-[16px] cursor-not-allowed transition">一键生成</button>
+                        <div class="flex items-end justify-between gap-3">
+                            <div class="min-w-0">
+                                <p id="ocTotalDuration" class="text-white text-[16px] font-semibold tracking-tight">总时长 00:00</p>
+                                <p class="text-[11px] text-white/45 mt-0.5">支持平面、全景素材</p>
+                            </div>
+                            <button type="button" id="ocBtnGenerate" disabled onclick="ocStartGenerate()" class="shrink-0 min-w-[104px] h-11 px-5 rounded-full bg-white/20 text-white/50 text-[15px] font-bold cursor-not-allowed transition">选好了</button>
+                        </div>
                     </div>
                 </div>
                 <div id="ocStepLoading" class="oneclick-step bg-white">
@@ -4703,75 +4737,187 @@ document.addEventListener('click', function(e){
 </script>
 
 <script>
-/* ========== AI 一键成片（篮球）运行时 ========== */
+/* ========== AI 一键成片（Insta360 式选素材 + 篮球/足球） ========== */
 (function () {
     const OC_SCENES = [
-        { id: 'full', label: '全场比赛' },
-        { id: 'train', label: '训练' },
-        { id: 'general', label: '通用' }
+        { id: "full", label: "全场比赛" },
+        { id: "train", label: "训练" },
+        { id: "general", label: "通用" }
     ];
-    const OC_TEMPLATES = [
-        { id: 'bb-goal', title: '进球集锦 · 卡点', cover: 'https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif' },
-        { id: 'bb-moment', title: '高光瞬间 · 燃剪', cover: 'https://media.giphy.com/media/l0MYd8bRkV6fJ4K1q/giphy.gif' },
-        { id: 'bb-slow', title: '慢动作回放', cover: 'https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif' }
+    const OC_SPORTS = [
+        { id: "basketball", label: "篮球" },
+        { id: "football", label: "足球" },
+        { id: "more", label: "更多" }
+    ];
+    const OC_TEMPLATES_BB = [
+        { id: "bb-goal", title: "进球集锦 · 卡点", cover: "https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif" },
+        { id: "bb-moment", title: "高光瞬间 · 燃剪", cover: "https://media.giphy.com/media/l0MYd8bRkV6fJ4K1q/giphy.gif" },
+        { id: "bb-slow", title: "慢动作回放", cover: "https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif" }
+    ];
+    const OC_TEMPLATES_FB = [
+        { id: "fb-goal", title: "进球特写 · 燃剪", cover: "https://media.giphy.com/media/l0MYd8bRkV6fJ4K1q/giphy.gif" },
+        { id: "fb-pass", title: "传球配合", cover: "https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif" },
+        { id: "fb-save", title: "门将扑救", cover: "https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif" }
     ];
     const OC_VIDEOS = [
-        { id: 'v1', title: '2026-04-01 14:59', meta: '150.2 MB · 本地相册', duration: '18:11', thumb: 'https://images.unsplash.com/photo-1546519638-68e109498ffc?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80' },
-        { id: 'v2', title: '训练对抗片段 A', meta: '82.4 MB · 本地相册', duration: '09:32', thumb: 'https://images.unsplash.com/photo-1519861531473-9200262188bf?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80' },
-        { id: 'v3', title: '手机场边录制', meta: '210 MB · 本地相册', duration: '06:05', thumb: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80' }
+        { id: "v1", title: "2026-04-01 14:59", meta: "150.2 MB · 本地相册", duration: "18:11", seconds: 1091, thumb: "https://images.unsplash.com/photo-1546519638-68e109498ffc?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80", source: "phone", type: "video" },
+        { id: "v2", title: "训练对抗片段 A", meta: "82.4 MB · 本地相册", duration: "09:32", seconds: 572, thumb: "https://images.unsplash.com/photo-1519861531473-9200262188bf?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80", source: "phone", type: "video" },
+        { id: "v3", title: "手机场边录制", meta: "210 MB · 本地相册", duration: "06:05", seconds: 365, thumb: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80", source: "phone", type: "video" },
+        { id: "cam1", title: "相机场边 · 2026/03/28", meta: "Insta360", duration: "05:20", seconds: 320, thumb: "https://images.unsplash.com/photo-1518611012118-696072aa579a?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80", source: "camera", type: "video" },
+        { id: "dl1", title: "已下载 · 训练录像", meta: "本地", duration: "12:04", seconds: 724, thumb: "https://images.unsplash.com/photo-1519861531473-9200262188bf?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80", source: "downloaded", type: "video" },
+        { id: "ph1", title: "赛前热身", meta: "照片", duration: "", seconds: 0, thumb: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80", source: "phone", type: "photo" }
     ];
-    const OC_BGMS = ['OUTSIDE', 'Arena Pulse', 'Street Hype', 'Clean Win'];
+    const OC_BGMS = ["OUTSIDE", "Arena Pulse", "Street Hype", "Clean Win"];
 
-    let ocSceneId = 'full';
+    let ocSportId = "basketball";
+    let ocSourceTab = "phone";
+    let ocMediaFilter = "all";
+    let ocSceneId = "full";
     let ocSelected = new Set();
     let ocTemplateId = null;
     let ocBgmIndex = 0;
     let ocSimulateFail = false;
 
+    function ocCurrentTemplates() {
+        return ocSportId === "football" ? OC_TEMPLATES_FB : OC_TEMPLATES_BB;
+    }
+
+    function ocFormatTotalSeconds(sec) {
+        var t = Math.round(Math.max(0, sec));
+        var m = Math.floor(t / 60);
+        var s = t % 60;
+        return (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s;
+    }
+
+    function ocSportLabel() {
+        var s = OC_SPORTS.find(function (x) { return x.id === ocSportId; });
+        return s ? s.label : "篮球";
+    }
+
     window.ocShowStep = function (id) {
-        document.querySelectorAll('.oneclick-step').forEach(function (el) {
-            el.classList.toggle('active', el.id === id);
+        document.querySelectorAll(".oneclick-step").forEach(function (el) {
+            el.classList.toggle("active", el.id === id);
         });
     };
 
     window.openOneClickFlow = function () {
-        ocSceneId = 'full';
+        ocSportId = "basketball";
+        ocSourceTab = "phone";
+        ocMediaFilter = "all";
+        ocSceneId = "full";
         ocSelected = new Set();
         ocTemplateId = null;
         ocBgmIndex = 0;
         ocSimulateFail = false;
-        var df = document.getElementById('ocDemoFail');
+        var df = document.getElementById("ocDemoFail");
         if (df) df.checked = false;
+        ocRenderSportChips();
         ocRenderSceneChips();
-        ocRenderGallery();
-        window.ocShowStep('ocStepGallery');
-        var m = document.getElementById('oneClickModal');
+        ocSyncSourceTabsUI();
+        ocSyncMediaTabsUI();
+        window.ocRenderGallery();
+        window.ocShowStep("ocStepGallery");
+        var m = document.getElementById("oneClickModal");
         if (!m) return;
-        m.classList.remove('opacity-0', 'pointer-events-none');
-        requestAnimationFrame(function () { m.classList.remove('translate-y-full'); });
-        if (typeof updateFloatingFaqVisibility === 'function') updateFloatingFaqVisibility();
+        m.classList.remove("opacity-0", "pointer-events-none");
+        requestAnimationFrame(function () { m.classList.remove("translate-y-full"); });
+        if (typeof updateFloatingFaqVisibility === "function") updateFloatingFaqVisibility();
     };
 
     window.closeOneClickFlow = function () {
-        var m = document.getElementById('oneClickModal');
+        var m = document.getElementById("oneClickModal");
         if (!m) return;
-        m.classList.add('translate-y-full');
+        m.classList.add("translate-y-full");
         setTimeout(function () {
-            m.classList.add('opacity-0', 'pointer-events-none');
+            m.classList.add("opacity-0", "pointer-events-none");
         }, 280);
-        if (typeof updateFloatingFaqVisibility === 'function') updateFloatingFaqVisibility();
+        if (typeof updateFloatingFaqVisibility === "function") updateFloatingFaqVisibility();
     };
 
-    function ocRenderSceneChips() {
-        var host = document.getElementById('ocSceneChips');
+    window.ocSetSourceTab = function (tab) {
+        ocSourceTab = tab;
+        ocSelected = new Set();
+        ocSyncSourceTabsUI();
+        window.ocRenderGallery();
+    };
+
+    window.ocSetMediaFilter = function (f) {
+        ocMediaFilter = f;
+        ocSyncMediaTabsUI();
+        ocSelected = new Set();
+        window.ocRenderGallery();
+    };
+
+    function ocSyncSourceTabsUI() {
+        [["camera", "ocSrcCamera"], ["downloaded", "ocSrcDownloaded"], ["phone", "ocSrcPhone"]].forEach(function (pair) {
+            var el = document.getElementById(pair[1]);
+            if (!el) return;
+            var on = ocSourceTab === pair[0];
+            el.classList.toggle("text-white", on);
+            el.classList.toggle("font-semibold", on);
+            el.classList.toggle("text-white/45", !on);
+        });
+    }
+
+    function ocSyncMediaTabsUI() {
+        [["all", "ocMediaAll"], ["video", "ocMediaVideo"], ["photo", "ocMediaPhoto"]].forEach(function (pair) {
+            var el = document.getElementById(pair[1]);
+            if (!el) return;
+            var on = ocMediaFilter === pair[0];
+            el.classList.toggle("text-white/90", on);
+            el.classList.toggle("text-white/40", !on);
+            el.classList.toggle("border-[#f5c200]", on);
+            el.classList.toggle("border-transparent", !on);
+        });
+    }
+
+    function ocRenderSportChips() {
+        var host = document.getElementById("ocSportChips");
         if (!host) return;
-        host.innerHTML = '';
+        host.innerHTML = "";
+        OC_SPORTS.forEach(function (s) {
+            var b = document.createElement("button");
+            b.type = "button";
+            b.className = "px-3 py-1.5 rounded-full text-[11px] font-bold border transition " + (s.id === ocSportId
+                ? "bg-[#f5c200] text-black border-[#f5c200]"
+                : "bg-white/[0.08] text-white/70 border-white/10");
+            b.textContent = s.label;
+            b.onclick = function () {
+                if (s.id === "more") {
+                    alert("更多运动模式即将上线");
+                    return;
+                }
+                ocSportId = s.id;
+                ocRenderSportChips();
+                ocRenderSceneChips();
+                window.ocRenderGallery();
+                var editStep = document.getElementById("ocStepEdit");
+                if (editStep && editStep.classList.contains("active")) {
+                    ocTemplateId = ocCurrentTemplates()[0].id;
+                    window.ocRenderEditTemplateStrip();
+                    window.ocRefreshEditStatus();
+                }
+            };
+            host.appendChild(b);
+        });
+    }
+
+    function ocRenderSceneChips() {
+        var row = document.getElementById("ocSceneRow");
+        var host = document.getElementById("ocSceneChips");
+        if (!host) return;
+        if (ocSportId === "more") {
+            if (row) row.classList.add("hidden");
+            return;
+        }
+        if (row) row.classList.remove("hidden");
+        host.innerHTML = "";
         OC_SCENES.forEach(function (s) {
-            var b = document.createElement('button');
-            b.type = 'button';
-            b.className = 'px-3 py-1.5 rounded-full text-[12px] font-bold border transition ' + (s.id === ocSceneId
-                ? 'bg-gray-900 text-white border-gray-900'
-                : 'bg-white text-gray-600 border-gray-200');
+            var b = document.createElement("button");
+            b.type = "button";
+            b.className = "px-3 py-1.5 rounded-full text-[11px] font-bold border transition " + (s.id === ocSceneId
+                ? "bg-white text-[#171718] border-white"
+                : "bg-transparent text-white/65 border-white/25");
             b.textContent = s.label;
             b.onclick = function () {
                 ocSceneId = s.id;
@@ -4781,83 +4927,116 @@ document.addEventListener('click', function(e){
         });
     }
 
-    window.ocRenderGallery = function () {
-        var list = document.getElementById('ocVideoList');
-        if (!list) return;
-        list.innerHTML = '';
-        OC_VIDEOS.forEach(function (v) {
-            var row = document.createElement('button');
-            row.type = 'button';
-            row.className = 'video-item flex p-3 bg-white border border-gray-100 rounded-[16px] shadow-sm relative w-full text-left active:bg-gray-50';
-            row.dataset.vid = v.id;
-            row.innerHTML = '<div class="w-24 h-[64px] bg-gray-200 rounded-xl relative overflow-hidden flex-shrink-0">' +
-                '<img src="' + v.thumb + '" class="w-full h-full object-cover" alt="">' +
-                '<span class="absolute bottom-1 right-1 bg-black/60 text-white text-[10px] px-1 rounded">' + v.duration + '</span></div>' +
-                '<div class="ml-3 flex-1 flex flex-col justify-center min-w-0">' +
-                '<h4 class="text-[14px] font-bold text-gray-900 truncate">' + v.title + '</h4>' +
-                '<p class="text-[11px] text-gray-400 mt-1">' + v.meta + '</p></div>' +
-                '<div class="oc-sel w-[22px] h-[22px] rounded-full border border-gray-300 bg-white flex items-center justify-center text-transparent flex-shrink-0">' +
-                '<i class="fa-solid fa-check text-[11px]"></i></div>';
-            row.onclick = function () { window.ocToggleVideo(v.id); };
-            list.appendChild(row);
+    function ocFilteredVideos() {
+        return OC_VIDEOS.filter(function (v) {
+            if (v.source !== ocSourceTab) return false;
+            if (ocMediaFilter === "all") return true;
+            return v.type === ocMediaFilter;
         });
+    }
+
+    window.ocRenderGallery = function () {
+        var grid = document.getElementById("ocVideoGrid");
+        var empty = document.getElementById("ocCameraEmpty");
+        if (!grid) return;
+        grid.innerHTML = "";
+        var items = ocFilteredVideos();
+        if (ocSourceTab === "camera" && items.length === 0) {
+            if (empty) empty.classList.remove("hidden");
+            grid.classList.add("hidden");
+        } else {
+            if (empty) empty.classList.add("hidden");
+            grid.classList.remove("hidden");
+            items.forEach(function (v) {
+                var cell = document.createElement("button");
+                cell.type = "button";
+                cell.className = "oc-cell relative aspect-[3/4] bg-[#222] overflow-hidden w-full text-left active:opacity-90";
+                cell.dataset.vid = v.id;
+                var dur = v.type === "video" && v.duration ? v.duration : "";
+                cell.innerHTML = "<img src=\"" + v.thumb + "\" class=\"w-full h-full object-cover\" alt=\"\">" +
+                    (dur ? "<span class=\"absolute bottom-1 right-1 bg-black/70 text-white text-[9px] px-1 rounded\">" + dur + "</span>" : "") +
+                    "<div class=\"oc-sel absolute top-1.5 right-1.5 w-[20px] h-[20px] rounded-full border-2 border-white/90 bg-black/30 flex items-center justify-center text-transparent\">" +
+                    "<i class=\"fa-solid fa-check text-[10px]\"></i></div>";
+                cell.onclick = function () { window.ocToggleVideo(v.id); };
+                grid.appendChild(cell);
+            });
+        }
         ocUpdateGallerySelectionUI();
     };
 
     window.ocToggleVideo = function (id) {
+        var item = OC_VIDEOS.find(function (x) { return x.id === id; });
+        if (!item || item.source !== ocSourceTab) return;
         if (ocSelected.has(id)) ocSelected.delete(id);
         else ocSelected.add(id);
         ocUpdateGallerySelectionUI();
     };
 
+    function ocSelectionTotalSeconds() {
+        var sum = 0;
+        ocSelected.forEach(function (id) {
+            var v = OC_VIDEOS.find(function (x) { return x.id === id; });
+            if (v && v.seconds) sum += v.seconds;
+        });
+        return sum;
+    }
+
     function ocUpdateGallerySelectionUI() {
-        document.querySelectorAll('#ocVideoList .video-item').forEach(function (el) {
+        document.querySelectorAll("#ocVideoGrid .oc-cell").forEach(function (el) {
             var vid = el.dataset.vid;
             var on = ocSelected.has(vid);
-            var ind = el.querySelector('.oc-sel');
-            el.classList.toggle('border-[#FF5028]', on);
-            if (!ind) return;
-            ind.classList.toggle('bg-[#FF5028]', on);
-            ind.classList.toggle('border-[#FF5028]', on);
-            ind.classList.toggle('text-white', on);
-            ind.classList.toggle('text-transparent', !on);
+            var ind = el.querySelector(".oc-sel");
+            el.classList.toggle("ring-2", on);
+            el.classList.toggle("ring-[#f5c200]", on);
+            el.classList.toggle("ring-inset", on);
+            if (ind) {
+                ind.classList.toggle("bg-[#f5c200]", on);
+                ind.classList.toggle("border-transparent", on);
+                ind.classList.toggle("border-white/90", !on);
+                ind.classList.toggle("text-black", on);
+                ind.classList.toggle("text-transparent", !on);
+            }
         });
-        var nextBtn = document.getElementById('ocBtnGenerate');
+        var totalEl = document.getElementById("ocTotalDuration");
+        if (totalEl) totalEl.textContent = "总时长 " + ocFormatTotalSeconds(ocSelectionTotalSeconds());
+        var nextBtn = document.getElementById("ocBtnGenerate");
         var ok = ocSelected.size >= 1;
         if (!nextBtn) return;
         nextBtn.disabled = !ok;
         nextBtn.className = ok
-            ? 'w-full bg-black text-white font-bold py-3.5 rounded-xl text-[16px] active:scale-95 transition'
-            : 'w-full bg-gray-200 text-gray-400 font-bold py-3.5 rounded-xl text-[16px] cursor-not-allowed transition';
+            ? "shrink-0 min-w-[104px] h-11 px-5 rounded-full bg-[#f5c200] text-black text-[15px] font-bold active:scale-[0.98] transition"
+            : "shrink-0 min-w-[104px] h-11 px-5 rounded-full bg-white/20 text-white/50 text-[15px] font-bold cursor-not-allowed transition";
     }
 
     function ocFindTemplate(tid) {
-        for (var i = 0; i < OC_TEMPLATES.length; i++) {
-            if (OC_TEMPLATES[i].id === tid) return OC_TEMPLATES[i];
+        var list = ocCurrentTemplates();
+        for (var i = 0; i < list.length; i++) {
+            if (list[i].id === tid) return list[i];
         }
-        return OC_TEMPLATES[0];
+        return list[0];
     }
 
     window.ocRefreshEditStatus = function () {
-        var line = document.getElementById('ocEditStatusLine');
+        var line = document.getElementById("ocEditStatusLine");
         if (!line) return;
         var t = ocFindTemplate(ocTemplateId);
         var sceneLabel = (OC_SCENES.find(function (x) { return x.id === ocSceneId; }) || OC_SCENES[0]).label;
-        line.textContent = '场景：' + sceneLabel + ' · ' + (t ? t.title : '智能成片') + ' · 配乐 ' + OC_BGMS[ocBgmIndex];
+        var sport = ocSportLabel();
+        line.textContent = sport + " · 场景：" + sceneLabel + " · " + (t ? t.title : "智能成片") + " · 配乐 " + OC_BGMS[ocBgmIndex];
     };
 
     window.ocRenderEditTemplateStrip = function () {
-        var strip = document.getElementById('ocEditTemplateStrip');
+        var strip = document.getElementById("ocEditTemplateStrip");
         if (!strip) return;
-        strip.innerHTML = '';
-        OC_TEMPLATES.forEach(function (t) {
-            var b = document.createElement('button');
-            b.type = 'button';
-            b.className = 'flex-shrink-0 w-[108px] rounded-xl border overflow-hidden text-left transition active:scale-[0.98] ' +
-                (t.id === ocTemplateId ? 'border-[#FF5028]' : 'border-white/10');
-            b.innerHTML = '<div class="relative w-full bg-neutral-800" style="aspect-ratio:1/1">' +
-                '<img src="' + t.cover + '" class="w-full h-full object-cover" alt=""></div>' +
-                '<div class="p-2 bg-[#1e1e1e]"><p class="text-[10px] font-bold text-white/90 truncate">' + t.title + '</p></div>';
+        strip.innerHTML = "";
+        ocCurrentTemplates().forEach(function (t) {
+            var b = document.createElement("button");
+            b.type = "button";
+            b.className = "flex-shrink-0 w-[108px] rounded-xl border overflow-hidden text-left transition active:scale-[0.98] " +
+                (t.id === ocTemplateId ? "border-[#FF5028]" : "border-white/10");
+            b.innerHTML = "<div class=\"relative w-full bg-neutral-800\" style=\"aspect-ratio:1/1\">" +
+                "<img src=\"" + t.cover + "\" class=\"w-full h-full object-cover\" alt=\"\"></div>" +
+                "<div class=\"p-2 bg-[#1e1e1e]\"><p class=\"text-[10px] font-bold text-white/90 truncate\">" + t.title + "</p></div>";
             b.onclick = function () {
                 ocTemplateId = t.id;
                 window.ocRenderEditTemplateStrip();
@@ -4873,91 +5052,91 @@ document.addEventListener('click', function(e){
     };
 
     window.ocEnterEditStep = function () {
-        ocTemplateId = OC_TEMPLATES[0].id;
+        ocTemplateId = ocCurrentTemplates()[0].id;
         window.ocRenderEditTemplateStrip();
         window.ocRefreshEditStatus();
-        window.ocShowStep('ocStepEdit');
+        window.ocShowStep("ocStepEdit");
     };
 
     window.ocStartGenerate = function () {
-        var demo = document.getElementById('ocDemoFail');
+        var demo = document.getElementById("ocDemoFail");
         ocSimulateFail = !!(demo && demo.checked);
-        window.ocShowStep('ocStepLoading');
-        var bar = document.getElementById('ocProgressBar');
-        var txt = document.getElementById('ocProgressText');
+        window.ocShowStep("ocStepLoading");
+        var bar = document.getElementById("ocProgressBar");
+        var txt = document.getElementById("ocProgressText");
         var p = 0;
-        if (bar) bar.style.width = '0%';
-        if (txt) txt.textContent = '分析画面…';
+        if (bar) bar.style.width = "0%";
+        if (txt) txt.textContent = "分析画面…";
         var timer = setInterval(function () {
             p += Math.floor(Math.random() * 18) + 8;
             if (p >= 100) {
                 p = 100;
                 clearInterval(timer);
-                if (bar) bar.style.width = '100%';
-                if (txt) txt.textContent = '即将完成';
+                if (bar) bar.style.width = "100%";
+                if (txt) txt.textContent = "即将完成";
                 setTimeout(function () {
-                    if (ocSimulateFail) window.ocShowStep('ocStepFail');
+                    if (ocSimulateFail) window.ocShowStep("ocStepFail");
                     else window.ocEnterEditStep();
                 }, 400);
                 return;
             }
-            if (bar) bar.style.width = p + '%';
+            if (bar) bar.style.width = p + "%";
             if (txt) {
-                if (p < 35) txt.textContent = '分析画面与高光…';
-                else if (p < 70) txt.textContent = '匹配节奏与转场…';
-                else txt.textContent = '合成配乐…';
+                if (p < 35) txt.textContent = "分析画面与高光…";
+                else if (p < 70) txt.textContent = "匹配节奏与转场…";
+                else txt.textContent = "合成配乐…";
             }
         }, 380);
     };
 
     window.ocStartExport = function () {
-        window.ocShowStep('ocStepExporting');
-        var bar = document.getElementById('ocExportProgressBar');
+        window.ocShowStep("ocStepExporting");
+        var bar = document.getElementById("ocExportProgressBar");
         var ep = 0;
-        if (bar) bar.style.width = '0%';
+        if (bar) bar.style.width = "0%";
         var t2 = setInterval(function () {
             ep += 22;
             if (ep >= 100) {
                 ep = 100;
                 clearInterval(t2);
-                if (bar) bar.style.width = '100%';
-                setTimeout(function () { window.ocShowStep('ocStepExportDone'); }, 350);
+                if (bar) bar.style.width = "100%";
+                setTimeout(function () { window.ocShowStep("ocStepExportDone"); }, 350);
                 return;
             }
-            if (bar) bar.style.width = ep + '%';
+            if (bar) bar.style.width = ep + "%";
         }, 120);
     };
 
     window.ocFromExportContinueEdit = function () {
         window.closeOneClickFlow();
-        if (typeof setBottomTab === 'function') setBottomTab('create');
-        if (typeof openManualEditorFromHome === 'function') openManualEditorFromHome();
-        if (typeof markManualEditorOpen === 'function') markManualEditorOpen();
+        if (typeof setBottomTab === "function") setBottomTab("create");
+        if (typeof openManualEditorFromHome === "function") openManualEditorFromHome();
+        if (typeof markManualEditorOpen === "function") markManualEditorOpen();
     };
 
     window.ocOpenAdvancedTimeline = function () {
         window.closeOneClickFlow();
-        if (typeof setBottomTab === 'function') setBottomTab('create');
-        if (typeof resetManualEditorFlow === 'function') resetManualEditorFlow();
-        if (typeof manualSourceSelected !== 'undefined' && !manualSourceSelected && typeof toggleManualSourceSelection === 'function') {
+        if (typeof setBottomTab === "function") setBottomTab("create");
+        if (typeof resetManualEditorFlow === "function") resetManualEditorFlow();
+        if (typeof manualSourceSelected !== "undefined" && !manualSourceSelected && typeof toggleManualSourceSelection === "function") {
             toggleManualSourceSelection();
         }
-        if (typeof enterManualEditorWorkspace === 'function') enterManualEditorWorkspace();
-        if (typeof openManualEditorModal === 'function') openManualEditorModal();
-        if (typeof markManualEditorOpen === 'function') markManualEditorOpen();
+        if (typeof enterManualEditorWorkspace === "function") enterManualEditorWorkspace();
+        if (typeof openManualEditorModal === "function") openManualEditorModal();
+        if (typeof markManualEditorOpen === "function") markManualEditorOpen();
     };
 
     window.ocFailToManual = function () {
         window.closeOneClickFlow();
-        if (typeof setBottomTab === 'function') setBottomTab('create');
-        if (typeof openManualEditorFromHome === 'function') openManualEditorFromHome();
-        if (typeof markManualEditorOpen === 'function') markManualEditorOpen();
+        if (typeof setBottomTab === "function") setBottomTab("create");
+        if (typeof openManualEditorFromHome === "function") openManualEditorFromHome();
+        if (typeof markManualEditorOpen === "function") markManualEditorOpen();
     };
 
     window.ocFailReselect = function () {
         ocSelected = new Set();
         window.ocRenderGallery();
-        window.ocShowStep('ocStepGallery');
+        window.ocShowStep("ocStepGallery");
     };
 })();
 </script>
