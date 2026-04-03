@@ -2111,6 +2111,26 @@
                                     </div>
                                 </div>
                             </div>
+                            <div id="ocEditFilterChrome" class="hidden flex flex-col min-h-0 overflow-hidden shrink-0 bg-[#161616] border-t border-white/[0.08] max-h-[42vh]">
+                                <div id="ocEditFilterTimelineArea" class="flex flex-col bg-[#161616] shrink-0 border-t border-white/[0.06] py-1.5 px-3">
+                                    <p class="text-[10px] text-white/40 mb-1">选择片段 · 「当前片段」下按段保存参数</p>
+                                    <div id="ocEditFilterTimelineRuler" class="h-5 shrink-0 flex flex-row items-end justify-between gap-1 overflow-hidden border-b border-white/[0.04] mb-1 w-full"></div>
+                                    <div class="relative h-[56px] shrink-0">
+                                        <div id="ocEditFilterVideoScroll" class="absolute inset-0 overflow-x-auto no-scrollbar flex items-stretch pb-0.5">
+                                            <div id="ocEditFilterVideoRow" class="flex items-stretch gap-0.5 h-[56px] min-w-min pr-1"></div>
+                                        </div>
+                                        <div class="pointer-events-none absolute left-[28%] top-0 bottom-0 w-px bg-white/90 z-[10] shadow-[0_0_8px_rgba(255,255,255,0.35)]" id="ocEditFilterPlayheadLine" aria-hidden="true"></div>
+                                    </div>
+                                </div>
+                                <div id="ocEditFilterPresetsHost" class="flex-1 min-h-0 flex flex-col border-t border-white/[0.06]">
+                                    <p class="text-[10px] text-white/45 px-3 pt-2 pb-1">滤镜预设</p>
+                                    <div id="ocEditFilterPresetStrip" class="flex gap-2 overflow-x-auto no-scrollbar px-3 pb-2 pt-0.5 shrink-0"></div>
+                                </div>
+                                <div id="ocEditFilterAdjustHost" class="hidden flex-1 min-h-0 overflow-y-auto no-scrollbar px-3 py-2 border-t border-white/[0.06] flex flex-col gap-3">
+                                    <p class="text-[10px] text-white/45 shrink-0">调色（与预设叠加，CSS 预览）</p>
+                                    <div id="ocEditFilterAdjustSliders" class="flex flex-col gap-2.5 pb-2"></div>
+                                </div>
+                            </div>
                         </div>
                         <div id="ocEditTemplatePanel" class="shrink-0 bg-[#161616] border-t border-white/[0.08]">
                             <div class="px-3 pt-2 pb-1">
@@ -2199,6 +2219,34 @@
                             </div>
                             <div class="flex justify-end items-center py-2.5 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
                                 <button type="button" onclick="window.ocConfirmTextEdit()" class="w-11 h-11 rounded-xl bg-white/[0.08] flex items-center justify-center text-white active:scale-95 active:bg-white/[0.12] transition" aria-label="完成文字贴纸" title="完成">
+                                    <i class="fa-solid fa-check text-[20px]"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div id="ocEditFilterBottomBar" class="hidden shrink-0 flex flex-col border-t border-white/[0.08] bg-[#121212]">
+                            <div class="flex items-stretch py-2 pl-1 pr-2 gap-1 border-b border-white/[0.06]">
+                                <button type="button" onclick="ocSetEditTool('template')" class="shrink-0 flex flex-col items-center justify-center min-w-[44px] px-0.5 text-white/45 active:text-white/75 active:scale-95 transition" aria-label="返回模版">
+                                    <i class="fa-solid fa-chevron-left text-[15px]"></i>
+                                    <span class="text-[9px] font-medium leading-tight mt-0.5 text-center">模版</span>
+                                </button>
+                                <div class="flex-1 min-w-0 flex items-center justify-center gap-2">
+                                    <button type="button" id="ocFilterTabPresets" onclick="window.ocSetFilterUiTab('presets')" class="shrink-0 px-4 py-2 rounded-xl text-[11px] font-bold border border-[#FF5028] bg-[#FF5028]/20 text-white">滤镜</button>
+                                    <button type="button" id="ocFilterTabAdjust" onclick="window.ocSetFilterUiTab('adjust')" class="shrink-0 px-4 py-2 rounded-xl text-[11px] font-bold border border-white/15 bg-white/[0.06] text-white/70">调色</button>
+                                </div>
+                            </div>
+                            <div id="ocEditFilterStrengthRow" class="flex items-center gap-3 px-3 py-2 border-b border-white/[0.06]">
+                                <span class="text-[10px] text-white/50 w-10 shrink-0">强度</span>
+                                <input type="range" id="ocFilterStrengthSlider" min="0" max="100" value="100" class="flex-1 min-w-0 h-1 accent-[#FF5028] bg-white/10 rounded-full appearance-none cursor-pointer" />
+                                <span id="ocFilterStrengthLabel" class="text-[10px] text-white/60 tabular-nums w-8 text-right shrink-0">100</span>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-2 px-3 py-2 border-b border-white/[0.06]">
+                                <span class="text-[10px] text-white/40 w-full mb-0.5">作用域</span>
+                                <button type="button" id="ocFilterScopeSeg" onclick="window.ocSetFilterScope('segment')" class="shrink-0 px-3 py-1.5 rounded-lg text-[10px] font-semibold border border-[#FF5028] bg-[#FF5028]/15 text-white">当前片段</button>
+                                <button type="button" id="ocFilterScopeAll" onclick="window.ocSetFilterScope('all')" class="shrink-0 px-3 py-1.5 rounded-lg text-[10px] font-semibold border border-white/15 bg-white/[0.06] text-white/75">全片统一</button>
+                                <button type="button" onclick="window.ocResetFilterState()" class="ml-auto shrink-0 px-3 py-1.5 rounded-lg text-[10px] font-semibold border border-white/15 text-white/70 active:bg-white/10">重置</button>
+                            </div>
+                            <div class="flex justify-end items-center py-2.5 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+                                <button type="button" onclick="window.ocConfirmFilterEdit()" class="w-11 h-11 rounded-xl bg-white/[0.08] flex items-center justify-center text-white active:scale-95 active:bg-white/[0.12] transition" aria-label="完成滤镜" title="完成">
                                     <i class="fa-solid fa-check text-[20px]"></i>
                                 </button>
                             </div>
@@ -4964,6 +5012,324 @@ document.addEventListener('click', function(e){
     var ocTextLayerIdSeq = 0;
     var OC_TEXT_LAYER_COLORS = ["#ffffff", "#FF5028", "#fbbf24", "#38bdf8", "#a78bfa"];
 
+    var OC_FILTER_PRESETS = [
+        { id: "none", label: "原图", filter: "" },
+        { id: "vivid", label: "鲜明", filter: "saturate(1.28) contrast(1.1)" },
+        { id: "bw", label: "黑白", filter: "grayscale(1) contrast(1.05)" },
+        { id: "warm", label: "暖色", filter: "sepia(0.22) hue-rotate(-8deg) saturate(1.08)" },
+        { id: "cool", label: "冷色", filter: "hue-rotate(12deg) saturate(1.06) brightness(1.02)" },
+        { id: "film", label: "胶片", filter: "contrast(1.12) brightness(0.96) saturate(0.92) sepia(0.12)" },
+        { id: "sunset", label: "夕照", filter: "sepia(0.18) saturate(1.35) hue-rotate(-15deg)" },
+        { id: "forest", label: "森绿", filter: "hue-rotate(-18deg) saturate(1.15) contrast(1.06)" },
+        { id: "cyber", label: "赛博", filter: "saturate(1.45) contrast(1.15) hue-rotate(185deg)" },
+        { id: "soft", label: "柔和", filter: "brightness(1.06) contrast(0.92) saturate(0.88)" },
+        { id: "dramatic", label: "戏剧", filter: "contrast(1.28) brightness(0.94) saturate(1.05)" },
+        { id: "vintage", label: "复古", filter: "sepia(0.35) contrast(1.08) brightness(1.02)" }
+    ];
+    var ocFilterBySegId = {};
+    var ocFilterGlobal = null;
+    var ocFilterScope = "segment";
+    var ocFilterUiTab = "presets";
+
+    function ocDefaultFilterState() {
+        return {
+            presetId: "none",
+            presetStrength: 100,
+            adjust: { exposure: 0, brightness: 0, contrast: 0, saturation: 0, temperature: 0, tint: 0 }
+        };
+    }
+
+    function ocEnsureFilterGlobal() {
+        if (!ocFilterGlobal) ocFilterGlobal = ocDefaultFilterState();
+    }
+
+    function ocCloneFilterState(src) {
+        var d = ocDefaultFilterState();
+        if (!src) return d;
+        d.presetId = src.presetId || "none";
+        d.presetStrength = typeof src.presetStrength === "number" ? src.presetStrength : 100;
+        d.adjust.exposure = src.adjust ? src.adjust.exposure || 0 : 0;
+        d.adjust.brightness = src.adjust ? src.adjust.brightness || 0 : 0;
+        d.adjust.contrast = src.adjust ? src.adjust.contrast || 0 : 0;
+        d.adjust.saturation = src.adjust ? src.adjust.saturation || 0 : 0;
+        d.adjust.temperature = src.adjust ? src.adjust.temperature || 0 : 0;
+        d.adjust.tint = src.adjust ? src.adjust.tint || 0 : 0;
+        return d;
+    }
+
+    function ocGetWritableFilterState() {
+        ocEnsureFilterGlobal();
+        if (ocFilterScope === "all") return ocFilterGlobal;
+        var seg = ocTimelineSelectedSeg;
+        var segs = ocBuildEditSegments();
+        if (!seg && segs.length) seg = segs[0];
+        if (!seg) return ocFilterGlobal;
+        if (!ocFilterBySegId[seg.id]) ocFilterBySegId[seg.id] = ocDefaultFilterState();
+        return ocFilterBySegId[seg.id];
+    }
+
+    function ocFindFilterPreset(id) {
+        for (var i = 0; i < OC_FILTER_PRESETS.length; i++) {
+            if (OC_FILTER_PRESETS[i].id === id) return OC_FILTER_PRESETS[i];
+        }
+        return OC_FILTER_PRESETS[0];
+    }
+
+    function ocMixPresetFilter(presetId, strengthPct) {
+        var p = ocFindFilterPreset(presetId);
+        if (!p.filter || presetId === "none") return "";
+        var t = Math.max(0, Math.min(100, strengthPct)) / 100;
+        if (t <= 0) return "";
+        if (t >= 0.999) return p.filter;
+        var re = /([a-z-]+)\(([^)]+)\)/gi;
+        var out = [];
+        var m;
+        while ((m = re.exec(p.filter)) !== null) {
+            var name = m[1].toLowerCase();
+            var inner = m[2].trim();
+            var num = parseFloat(inner);
+            var unit = inner.replace(/^-?[0-9.]+/, "") || "";
+            if (isNaN(num)) {
+                out.push(name + "(" + inner + ")");
+                continue;
+            }
+            if (name === "hue-rotate") {
+                out.push("hue-rotate(" + (num * t) + unit + ")");
+            } else if (name === "grayscale" || name === "sepia") {
+                out.push(name + "(" + (num * t) + ")");
+            } else if (name === "brightness" || name === "contrast" || name === "saturate") {
+                var v = 1 + (num - 1) * t;
+                out.push(name + "(" + v + unit + ")");
+            } else {
+                out.push(name + "(" + inner + ")");
+            }
+        }
+        return out.join(" ");
+    }
+
+    function ocAdjustFilterCss(adj) {
+        if (!adj) adj = ocDefaultFilterState().adjust;
+        var exp = adj.exposure || 0;
+        var br = adj.brightness || 0;
+        var b = 1 + exp * 0.006 + br * 0.005;
+        b = Math.max(0.2, Math.min(2.2, b));
+        var c = 1 + (adj.contrast || 0) * 0.008;
+        c = Math.max(0.3, Math.min(2.4, c));
+        var sat = Math.max(0, 1 + (adj.saturation || 0) * 0.01);
+        var hue = (adj.temperature || 0) * 0.35 + (adj.tint || 0) * 0.22;
+        return "brightness(" + b + ") contrast(" + c + ") saturate(" + sat + ") hue-rotate(" + hue + "deg)";
+    }
+
+    function ocComposePreviewFilterCss(state) {
+        if (!state) state = ocDefaultFilterState();
+        var pre = ocMixPresetFilter(state.presetId, state.presetStrength);
+        var adj = ocAdjustFilterCss(state.adjust);
+        if (pre && adj) return pre + " " + adj;
+        return pre || adj;
+    }
+
+    function ocPreviewFilterStateForImg() {
+        ocEnsureFilterGlobal();
+        if (ocEditToolId === "filter" && ocFilterScope === "all") return ocFilterGlobal;
+        var seg = ocTimelineSelectedSeg;
+        var segs = ocBuildEditSegments();
+        if (!seg && segs.length) seg = segs[0];
+        if (!seg) return ocDefaultFilterState();
+        return ocFilterBySegId[seg.id] || ocDefaultFilterState();
+    }
+
+    window.ocApplyPreviewFilterStyle = function () {
+        var img = document.getElementById("ocEditPreviewImg");
+        if (!img) return;
+        var st = ocPreviewFilterStateForImg();
+        var css = ocComposePreviewFilterCss(st);
+        img.style.filter = css || "none";
+    };
+
+    window.ocRenderFilterPresetStrip = function () {
+        var strip = document.getElementById("ocEditFilterPresetStrip");
+        if (!strip) return;
+        strip.innerHTML = "";
+        var state = ocGetWritableFilterState();
+        var prevImg = document.getElementById("ocEditPreviewImg");
+        var segsQuick = ocBuildEditSegments();
+        var fallbackThumb = (ocTimelineSelectedSeg && ocTimelineSelectedSeg.thumb) || (segsQuick[0] && segsQuick[0].thumb) || (prevImg && prevImg.getAttribute("src")) || "";
+        OC_FILTER_PRESETS.forEach(function (p) {
+            var b = document.createElement("button");
+            b.type = "button";
+            b.className = "shrink-0 flex flex-col items-center gap-1 w-[68px] active:scale-[0.98] transition";
+            var sel = state.presetId === p.id;
+            var thumb = document.createElement("div");
+            thumb.className = "w-[64px] h-[64px] rounded-xl overflow-hidden border-2 bg-neutral-800 " + (sel ? "border-[#FF5028] ring-2 ring-[#FF5028]/30" : "border-white/15");
+            var im = document.createElement("img");
+            im.src = fallbackThumb;
+            im.className = "w-full h-full object-cover pointer-events-none";
+            im.alt = "";
+            im.style.filter = p.filter || "none";
+            thumb.appendChild(im);
+            var lab = document.createElement("span");
+            lab.className = "text-[9px] font-semibold text-center leading-tight max-w-[68px] " + (sel ? "text-[#FF5028]" : "text-white/55");
+            lab.textContent = p.label;
+            b.appendChild(thumb);
+            b.appendChild(lab);
+            (function (pid) {
+                b.onclick = function () {
+                    var s = ocGetWritableFilterState();
+                    s.presetId = pid;
+                    window.ocRenderFilterPresetStrip();
+                    window.ocSyncFilterStrengthSlider();
+                    window.ocApplyPreviewFilterStyle();
+                };
+            })(p.id);
+            strip.appendChild(b);
+        });
+    };
+
+    window.ocSyncFilterStrengthSlider = function () {
+        var sl = document.getElementById("ocFilterStrengthSlider");
+        var lb = document.getElementById("ocFilterStrengthLabel");
+        var st = ocGetWritableFilterState();
+        if (sl) sl.value = String(st.presetStrength);
+        if (lb) lb.textContent = String(st.presetStrength);
+    };
+
+    window.ocRenderFilterAdjustSliders = function () {
+        var host = document.getElementById("ocEditFilterAdjustSliders");
+        if (!host) return;
+        host.innerHTML = "";
+        var st = ocGetWritableFilterState();
+        var defs = [
+            { key: "exposure", label: "曝光", min: -80, max: 80 },
+            { key: "brightness", label: "亮度", min: -80, max: 80 },
+            { key: "contrast", label: "对比度", min: -80, max: 80 },
+            { key: "saturation", label: "饱和度", min: -80, max: 80 },
+            { key: "temperature", label: "色温", min: -80, max: 80 },
+            { key: "tint", label: "色调", min: -80, max: 80 }
+        ];
+        defs.forEach(function (d) {
+            var row = document.createElement("div");
+            row.className = "flex flex-col gap-1";
+            var top = document.createElement("div");
+            top.className = "flex justify-between text-[10px] text-white/55";
+            top.innerHTML = "<span>" + d.label + "</span><span class=\"tabular-nums oc-filter-adj-val\" data-key=\"" + d.key + "\">" + (st.adjust[d.key] || 0) + "</span>";
+            var inp = document.createElement("input");
+            inp.type = "range";
+            inp.min = String(d.min);
+            inp.max = String(d.max);
+            inp.value = String(st.adjust[d.key] || 0);
+            inp.className = "w-full h-1 accent-[#FF5028] bg-white/10 rounded-full appearance-none cursor-pointer";
+            (function (key) {
+                inp.addEventListener("input", function () {
+                    var s = ocGetWritableFilterState();
+                    s.adjust[key] = parseInt(inp.value, 10) || 0;
+                    var vEl = host.querySelector(".oc-filter-adj-val[data-key=\"" + key + "\"]");
+                    if (vEl) vEl.textContent = String(s.adjust[key]);
+                    window.ocApplyPreviewFilterStyle();
+                });
+            })(d.key);
+            row.appendChild(top);
+            row.appendChild(inp);
+            host.appendChild(row);
+        });
+    };
+
+    window.ocSetFilterUiTab = function (tab) {
+        ocFilterUiTab = tab === "adjust" ? "adjust" : "presets";
+        var ph = document.getElementById("ocEditFilterPresetsHost");
+        var ah = document.getElementById("ocEditFilterAdjustHost");
+        var sr = document.getElementById("ocEditFilterStrengthRow");
+        var tp = document.getElementById("ocFilterTabPresets");
+        var ta = document.getElementById("ocFilterTabAdjust");
+        if (ph) ph.classList.toggle("hidden", ocFilterUiTab !== "presets");
+        if (ah) ah.classList.toggle("hidden", ocFilterUiTab !== "adjust");
+        if (sr) sr.classList.toggle("hidden", ocFilterUiTab !== "presets");
+        var active = "shrink-0 px-4 py-2 rounded-xl text-[11px] font-bold border border-[#FF5028] bg-[#FF5028]/20 text-white";
+        var idle = "shrink-0 px-4 py-2 rounded-xl text-[11px] font-bold border border-white/15 bg-white/[0.06] text-white/70";
+        if (tp) tp.className = ocFilterUiTab === "presets" ? active : idle;
+        if (ta) ta.className = ocFilterUiTab === "adjust" ? active : idle;
+        if (ocFilterUiTab === "adjust") window.ocRenderFilterAdjustSliders();
+        else window.ocRenderFilterPresetStrip();
+        window.ocSyncFilterStrengthSlider();
+    };
+
+    window.ocSetFilterScope = function (scope) {
+        ocFilterScope = scope === "all" ? "all" : "segment";
+        var bs = document.getElementById("ocFilterScopeSeg");
+        var ba = document.getElementById("ocFilterScopeAll");
+        var on = "shrink-0 px-3 py-1.5 rounded-lg text-[10px] font-semibold border border-[#FF5028] bg-[#FF5028]/15 text-white";
+        var off = "shrink-0 px-3 py-1.5 rounded-lg text-[10px] font-semibold border border-white/15 bg-white/[0.06] text-white/75";
+        if (bs) bs.className = ocFilterScope === "segment" ? on : off;
+        if (ba) ba.className = ocFilterScope === "all" ? on : off;
+        window.ocSetFilterUiTab(ocFilterUiTab);
+        window.ocApplyPreviewFilterStyle();
+    };
+
+    window.ocResetFilterState = function () {
+        var fresh = ocDefaultFilterState();
+        if (ocFilterScope === "all") {
+            ocFilterGlobal = fresh;
+            window.ocResetAllSegmentFilters();
+        } else {
+            var seg = ocTimelineSelectedSeg;
+            var segs = ocBuildEditSegments();
+            if (!seg && segs.length) seg = segs[0];
+            if (seg) ocFilterBySegId[seg.id] = ocCloneFilterState(fresh);
+        }
+        window.ocSetFilterUiTab(ocFilterUiTab);
+        window.ocApplyPreviewFilterStyle();
+    };
+
+    window.ocResetAllSegmentFilters = function () {
+        var segs = ocBuildEditSegments();
+        segs.forEach(function (s) {
+            ocFilterBySegId[s.id] = ocDefaultFilterState();
+        });
+    };
+
+    window.ocConfirmFilterEdit = function () {
+        window.ocSetEditTool("template");
+    };
+
+    window.ocRenderFilterTimelineTrack = function () {
+        var ruler = document.getElementById("ocEditFilterTimelineRuler");
+        var row = document.getElementById("ocEditFilterVideoRow");
+        if (!ruler || !row) return;
+        var segs = ocBuildEditSegments();
+        var totalSec = 0;
+        segs.forEach(function (s) { totalSec += s.seconds || 0; });
+        if (totalSec < 1) totalSec = 15;
+        ocFillTimelineRuler(ruler, totalSec);
+        ocFillVideoTimelineRow(row, segs, totalSec, {
+            interactive: true,
+            includeAdd: false,
+            clipClass: "oc-filter-timeline-clip"
+        });
+        document.querySelectorAll(".oc-filter-timeline-clip").forEach(function (n) {
+            var sid = n.getAttribute("data-oc-seg-id");
+            var on = ocTimelineSelectedSeg && ocTimelineSelectedSeg.id === sid;
+            n.classList.toggle("ring-2", on);
+            n.classList.toggle("ring-white", on);
+            n.classList.toggle("ring-offset-1", on);
+            n.classList.toggle("ring-offset-[#161616]", on);
+        });
+        segs.forEach(function (s) {
+            if (!ocFilterBySegId[s.id]) ocFilterBySegId[s.id] = ocDefaultFilterState();
+        });
+    };
+
+    function ocBindFilterStrengthSliderOnce() {
+        var sl = document.getElementById("ocFilterStrengthSlider");
+        if (!sl || sl.dataset.ocBound) return;
+        sl.dataset.ocBound = "1";
+        sl.addEventListener("input", function () {
+            var s = ocGetWritableFilterState();
+            s.presetStrength = parseInt(sl.value, 10) || 0;
+            var lb = document.getElementById("ocFilterStrengthLabel");
+            if (lb) lb.textContent = String(s.presetStrength);
+            window.ocApplyPreviewFilterStyle();
+        });
+    }
+
     function ocTemplatesForCategory() {
         if (ocHighlightCategoryId === "rec") return OC_HIGHLIGHT_TEMPLATES.slice();
         return OC_HIGHLIGHT_TEMPLATES.filter(function (t) {
@@ -5854,22 +6220,29 @@ document.addEventListener('click', function(e){
         if (!seg) {
             if (hint) hint.classList.remove("hidden");
             window.ocRenderClipBottomTools(null);
-            document.querySelectorAll(".oc-timeline-clip").forEach(function (n) {
+            document.querySelectorAll(".oc-timeline-clip, .oc-filter-timeline-clip").forEach(function (n) {
                 n.classList.remove("ring-2", "ring-white", "ring-offset-1", "ring-offset-[#161616]");
             });
+            if (typeof window.ocApplyPreviewFilterStyle === "function") window.ocApplyPreviewFilterStyle();
             return;
         }
         var p = document.getElementById("ocEditPreviewImg");
         if (p && seg.thumb) p.src = seg.thumb;
         if (hint) hint.classList.add("hidden");
         window.ocRenderClipBottomTools(seg);
-        document.querySelectorAll(".oc-timeline-clip").forEach(function (n) {
+        document.querySelectorAll(".oc-timeline-clip, .oc-filter-timeline-clip").forEach(function (n) {
             var on = n.getAttribute("data-oc-seg-id") === seg.id;
             n.classList.toggle("ring-2", on);
             n.classList.toggle("ring-white", on);
             n.classList.toggle("ring-offset-1", on);
             n.classList.toggle("ring-offset-[#161616]", on);
         });
+        if (typeof window.ocApplyPreviewFilterStyle === "function") window.ocApplyPreviewFilterStyle();
+        if (ocEditToolId === "filter") {
+            if (ocFilterUiTab === "presets") window.ocRenderFilterPresetStrip();
+            else window.ocRenderFilterAdjustSliders();
+            window.ocSyncFilterStrengthSlider();
+        }
     }
 
     window.ocRenderTimelineTrack = function () {
@@ -5900,21 +6273,21 @@ document.addEventListener('click', function(e){
     };
 
     window.ocSetEditTool = function (tool) {
-        if (tool === "filter") {
-            alert("运动滤镜与 LUT 即将上线（原型演示）。");
-            return;
-        }
         ocEditToolId = tool;
         var tplChrome = document.getElementById("ocEditTemplateChrome");
         var clipChrome = document.getElementById("ocEditClipChrome");
         var musicChrome = document.getElementById("ocEditMusicChrome");
         var textChrome = document.getElementById("ocEditTextChrome");
+        var filterChrome = document.getElementById("ocEditFilterChrome");
         var tplPanel = document.getElementById("ocEditTemplatePanel");
         var musPanel = document.getElementById("ocEditSubPanelMusic");
         var mainBar = document.getElementById("ocEditMainBottomBar");
         var clipBar = document.getElementById("ocEditClipBottomBar");
         var musicBar = document.getElementById("ocEditMusicBottomBar");
         var textBar = document.getElementById("ocEditTextBottomBar");
+        var filterBar = document.getElementById("ocEditFilterBottomBar");
+        if (filterChrome) filterChrome.classList.add("hidden");
+        if (filterBar) filterBar.classList.add("hidden");
         if (tool === "edit") {
             if (tplChrome) tplChrome.classList.remove("hidden");
             if (clipChrome) clipChrome.classList.remove("hidden");
@@ -5953,6 +6326,28 @@ document.addEventListener('click', function(e){
             if (textBar) textBar.classList.remove("hidden");
             ocSelectedTextLayerId = null;
             window.ocSelectTextLayer(null);
+        } else if (tool === "filter") {
+            if (tplChrome) tplChrome.classList.remove("hidden");
+            if (clipChrome) clipChrome.classList.add("hidden");
+            if (musicChrome) musicChrome.classList.add("hidden");
+            if (textChrome) textChrome.classList.add("hidden");
+            if (filterChrome) filterChrome.classList.remove("hidden");
+            if (tplPanel) tplPanel.classList.add("hidden");
+            if (musPanel) musPanel.classList.add("hidden");
+            if (mainBar) mainBar.classList.add("hidden");
+            if (clipBar) clipBar.classList.add("hidden");
+            if (musicBar) musicBar.classList.add("hidden");
+            if (textBar) textBar.classList.add("hidden");
+            if (filterBar) filterBar.classList.remove("hidden");
+            ocEnsureFilterGlobal();
+            window.ocRenderFilterTimelineTrack();
+            var segsF = ocBuildEditSegments();
+            var pickSeg = ocTimelineSelectedSeg;
+            if (!pickSeg || !segsF.some(function (s) { return s.id === pickSeg.id; })) pickSeg = segsF[0] || null;
+            if (pickSeg) ocSelectTimelineSegment(pickSeg);
+            else window.ocApplyPreviewFilterStyle();
+            ocBindFilterStrengthSliderOnce();
+            window.ocSetFilterScope(ocFilterScope);
         } else {
             if (tplChrome) tplChrome.classList.remove("hidden");
             if (clipChrome) clipChrome.classList.add("hidden");
@@ -5975,8 +6370,9 @@ document.addEventListener('click', function(e){
             el.classList.toggle("text-white/45", !on);
         });
         if (tool === "music") window.ocRefreshEditStatus();
-        if (tool === "template" || tool === "edit" || tool === "music" || tool === "text") ocUpdateEditTimelineDisplay();
+        if (tool === "template" || tool === "edit" || tool === "music" || tool === "text" || tool === "filter") ocUpdateEditTimelineDisplay();
         window.ocRenderTextPreviewOverlays();
+        if (tool !== "filter" && typeof window.ocApplyPreviewFilterStyle === "function") window.ocApplyPreviewFilterStyle();
     };
 
     window.ocCycleBgm = function () {
@@ -5992,6 +6388,10 @@ document.addEventListener('click', function(e){
         ocTextLayers = [];
         ocSelectedTextLayerId = null;
         ocTextLayerIdSeq = 0;
+        ocFilterBySegId = {};
+        ocFilterGlobal = null;
+        ocFilterScope = "segment";
+        ocFilterUiTab = "presets";
         ocEnsureTemplateInFilter();
         window.ocRenderHighlightCategoryTabs();
         window.ocRenderEditTemplateStrip();
