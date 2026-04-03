@@ -2111,26 +2111,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="ocEditFilterChrome" class="hidden flex flex-col min-h-0 overflow-hidden shrink-0 bg-[#161616] border-t border-white/[0.08] max-h-[42vh]">
-                                <div id="ocEditFilterTimelineArea" class="flex flex-col bg-[#161616] shrink-0 border-t border-white/[0.06] py-1.5 px-3">
-                                    <p class="text-[10px] text-white/40 mb-1">选择片段 · 「当前片段」下按段保存参数</p>
-                                    <div id="ocEditFilterTimelineRuler" class="h-5 shrink-0 flex flex-row items-end justify-between gap-1 overflow-hidden border-b border-white/[0.04] mb-1 w-full"></div>
-                                    <div class="relative h-[56px] shrink-0">
-                                        <div id="ocEditFilterVideoScroll" class="absolute inset-0 overflow-x-auto no-scrollbar flex items-stretch pb-0.5">
-                                            <div id="ocEditFilterVideoRow" class="flex items-stretch gap-0.5 h-[56px] min-w-min pr-1"></div>
-                                        </div>
-                                        <div class="pointer-events-none absolute left-[28%] top-0 bottom-0 w-px bg-white/90 z-[10] shadow-[0_0_8px_rgba(255,255,255,0.35)]" id="ocEditFilterPlayheadLine" aria-hidden="true"></div>
-                                    </div>
-                                </div>
-                                <div id="ocEditFilterPresetsHost" class="flex-1 min-h-0 flex flex-col border-t border-white/[0.06]">
-                                    <p class="text-[10px] text-white/45 px-3 pt-2 pb-1">滤镜预设</p>
-                                    <div id="ocEditFilterPresetStrip" class="flex gap-2 overflow-x-auto no-scrollbar px-3 pb-2 pt-0.5 shrink-0"></div>
-                                </div>
-                                <div id="ocEditFilterAdjustHost" class="hidden flex-1 min-h-0 overflow-y-auto no-scrollbar px-3 py-2 border-t border-white/[0.06] flex flex-col gap-3">
-                                    <p class="text-[10px] text-white/45 shrink-0">调色（与预设叠加，CSS 预览）</p>
-                                    <div id="ocEditFilterAdjustSliders" class="flex flex-col gap-2.5 pb-2"></div>
-                                </div>
-                            </div>
                         </div>
                         <div id="ocEditTemplatePanel" class="shrink-0 bg-[#161616] border-t border-white/[0.08]">
                             <div class="px-3 pt-2 pb-1">
@@ -2223,32 +2203,52 @@
                                 </button>
                             </div>
                         </div>
-                        <div id="ocEditFilterBottomBar" class="hidden shrink-0 flex flex-col border-t border-white/[0.08] bg-[#121212]">
-                            <div class="flex items-stretch py-2 pl-1 pr-2 gap-1 border-b border-white/[0.06]">
-                                <button type="button" onclick="ocSetEditTool('template')" class="shrink-0 flex flex-col items-center justify-center min-w-[44px] px-0.5 text-white/45 active:text-white/75 active:scale-95 transition" aria-label="返回模版">
-                                    <i class="fa-solid fa-chevron-left text-[15px]"></i>
-                                    <span class="text-[9px] font-medium leading-tight mt-0.5 text-center">模版</span>
-                                </button>
-                                <div class="flex-1 min-w-0 flex items-center justify-center gap-2">
-                                    <button type="button" id="ocFilterTabPresets" onclick="window.ocSetFilterUiTab('presets')" class="shrink-0 px-4 py-2 rounded-xl text-[11px] font-bold border border-[#FF5028] bg-[#FF5028]/20 text-white">滤镜</button>
-                                    <button type="button" id="ocFilterTabAdjust" onclick="window.ocSetFilterUiTab('adjust')" class="shrink-0 px-4 py-2 rounded-xl text-[11px] font-bold border border-white/15 bg-white/[0.06] text-white/70">调色</button>
+                        <div id="ocEditFilterBottomBar" class="hidden shrink-0 flex flex-col border-t border-white/[0.08] bg-[#161616] max-h-[58vh] min-h-0 overflow-hidden">
+                            <div class="flex gap-1.5 overflow-x-auto no-scrollbar px-2 py-2 border-b border-white/[0.06] shrink-0 bg-[#161616]">
+                                <button type="button" id="ocFilterMainTabPresets" onclick="window.ocSetFilterMainTab('presets')" class="shrink-0 px-3 py-1.5 rounded-full text-[11px] font-bold whitespace-nowrap transition bg-white/12 text-white">滤镜</button>
+                                <button type="button" id="ocFilterMainTabAdjust" onclick="window.ocSetFilterMainTab('adjust')" class="shrink-0 px-3 py-1.5 rounded-full text-[11px] font-bold whitespace-nowrap transition text-white/55">调色</button>
+                                <div class="shrink-0 inline-flex items-center gap-0.5 rounded-full pl-2 pr-1 py-0.5" id="ocFilterMainTabRestoreWrap">
+                                    <button type="button" id="ocFilterMainTabRestore" onclick="window.ocSetFilterMainTab('restore')" class="px-2 py-1 rounded-full text-[11px] font-bold whitespace-nowrap transition text-white/55">色彩还原</button>
+                                    <button type="button" onclick="alert('色彩还原：一键修正偏色（原型说明）');" class="w-7 h-7 shrink-0 rounded-full flex items-center justify-center text-white/40 hover:text-white/70 active:bg-white/10" title="说明" aria-label="色彩还原说明"><i class="fa-regular fa-circle-question text-[10px]"></i></button>
+                                </div>
+                                <button type="button" id="ocFilterMainTabUnderwater" onclick="window.ocSetFilterMainTab('underwater')" class="shrink-0 px-3 py-1.5 rounded-full text-[11px] font-bold whitespace-nowrap transition text-white/55">水下增强</button>
+                            </div>
+                            <div id="ocEditFilterTimelineArea" class="flex flex-col shrink-0 py-1.5 px-2 border-b border-white/[0.06] bg-[#161616]">
+                                <div id="ocEditFilterTimelineRuler" class="h-4 shrink-0 flex flex-row items-end justify-between gap-1 overflow-hidden border-b border-white/[0.04] mb-1 w-full"></div>
+                                <div class="relative h-[52px] shrink-0">
+                                    <div id="ocEditFilterVideoScroll" class="absolute inset-0 overflow-x-auto no-scrollbar flex items-stretch pb-0.5">
+                                        <div id="ocEditFilterVideoRow" class="flex items-stretch gap-0.5 h-[52px] min-w-min pr-1"></div>
+                                    </div>
+                                    <div class="pointer-events-none absolute left-[28%] top-0 bottom-0 w-px bg-white/90 z-[10] shadow-[0_0_8px_rgba(255,255,255,0.35)]" id="ocEditFilterPlayheadLine" aria-hidden="true"></div>
                                 </div>
                             </div>
-                            <div id="ocEditFilterStrengthRow" class="flex items-center gap-3 px-3 py-2 border-b border-white/[0.06]">
-                                <span class="text-[10px] text-white/50 w-10 shrink-0">强度</span>
-                                <input type="range" id="ocFilterStrengthSlider" min="0" max="100" value="100" class="flex-1 min-w-0 h-1 accent-[#FF5028] bg-white/10 rounded-full appearance-none cursor-pointer" />
-                                <span id="ocFilterStrengthLabel" class="text-[10px] text-white/60 tabular-nums w-8 text-right shrink-0">100</span>
+                            <div id="ocEditFilterPresetsPanel" class="flex-1 min-h-0 flex flex-col overflow-hidden shrink-0">
+                                <div id="ocEditFilterCategoryStrip" class="flex gap-2 overflow-x-auto no-scrollbar px-2 pt-2 pb-1 shrink-0 border-b border-white/[0.04]"></div>
+                                <div id="ocEditFilterPresetStrip" class="flex gap-2 overflow-x-auto no-scrollbar px-2 py-2 shrink-0"></div>
                             </div>
-                            <div class="flex flex-wrap items-center gap-2 px-3 py-2 border-b border-white/[0.06]">
-                                <span class="text-[10px] text-white/40 w-full mb-0.5">作用域</span>
-                                <button type="button" id="ocFilterScopeSeg" onclick="window.ocSetFilterScope('segment')" class="shrink-0 px-3 py-1.5 rounded-lg text-[10px] font-semibold border border-[#FF5028] bg-[#FF5028]/15 text-white">当前片段</button>
-                                <button type="button" id="ocFilterScopeAll" onclick="window.ocSetFilterScope('all')" class="shrink-0 px-3 py-1.5 rounded-lg text-[10px] font-semibold border border-white/15 bg-white/[0.06] text-white/75">全片统一</button>
-                                <button type="button" onclick="window.ocResetFilterState()" class="ml-auto shrink-0 px-3 py-1.5 rounded-lg text-[10px] font-semibold border border-white/15 text-white/70 active:bg-white/10">重置</button>
+                            <div id="ocEditFilterAdjustPanel" class="hidden flex-1 min-h-0 flex flex-col overflow-hidden px-2 pt-2 pb-1 shrink-0">
+                                <div id="ocEditFilterParamRow" class="flex gap-1 overflow-x-auto no-scrollbar pb-2 shrink-0"></div>
                             </div>
-                            <div class="flex justify-end items-center py-2.5 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
-                                <button type="button" onclick="window.ocConfirmFilterEdit()" class="w-11 h-11 rounded-xl bg-white/[0.08] flex items-center justify-center text-white active:scale-95 active:bg-white/[0.12] transition" aria-label="完成滤镜" title="完成">
-                                    <i class="fa-solid fa-check text-[20px]"></i>
-                                </button>
+                            <div id="ocEditFilterExtraPanel" class="hidden flex-1 min-h-0 flex flex-col items-center justify-center px-4 py-5 shrink-0">
+                                <p id="ocEditFilterExtraText" class="text-[12px] text-white/50 text-center leading-relaxed"></p>
+                                <button type="button" id="ocEditFilterExtraBtn" onclick="alert('功能即将上线（原型）')" class="hidden mt-3 px-4 py-2 rounded-full bg-white/10 text-[11px] font-semibold text-white/80">了解更多</button>
+                            </div>
+                            <div id="ocEditFilterStrengthRow" class="flex items-center gap-3 px-3 py-2 border-t border-white/[0.06] shrink-0 bg-[#161616]">
+                                <span class="text-[10px] text-white/45 w-9 shrink-0">强度</span>
+                                <input type="range" id="ocFilterStrengthSlider" min="0" max="100" value="100" class="flex-1 min-w-0 h-1.5 accent-[#FF5028] rounded-full appearance-none cursor-pointer oc-filter-range-track" />
+                                <span id="ocFilterStrengthLabel" class="text-[10px] text-white/55 tabular-nums w-7 text-right shrink-0">100</span>
+                            </div>
+                            <div id="ocEditFilterAdjustSliderRow" class="hidden flex-col gap-1 px-3 py-2 border-t border-white/[0.06] shrink-0 bg-[#161616]">
+                                <div class="flex justify-center min-h-[18px]">
+                                    <span id="ocFilterAdjustValueLabel" class="text-[13px] font-bold text-[#FF5028] tabular-nums">50</span>
+                                </div>
+                                <input type="range" id="ocFilterAdjustMasterSlider" min="0" max="100" value="50" class="w-full h-1.5 accent-[#FF5028] rounded-full appearance-none cursor-pointer oc-filter-range-track" />
+                            </div>
+                            <div class="flex items-center justify-between gap-1.5 px-2 py-2.5 border-t border-white/[0.08] shrink-0 bg-[#121212] pb-[max(0.6rem,env(safe-area-inset-bottom))]">
+                                <button type="button" onclick="ocSetEditTool('template')" class="w-10 h-10 shrink-0 rounded-xl flex items-center justify-center text-white/70 active:bg-white/10 transition" aria-label="取消" title="取消"><i class="fa-solid fa-xmark text-[18px]"></i></button>
+                                <button type="button" onclick="window.ocResetFilterState()" class="shrink-0 px-3 py-2 rounded-full bg-white/[0.08] text-[11px] font-semibold text-white/85 border border-white/10 active:scale-[0.98]">重置</button>
+                                <button type="button" onclick="window.ocApplyFilterToAllSegments()" class="shrink-0 flex-1 min-w-0 max-w-[140px] px-2 py-2 rounded-full bg-white/[0.08] text-[10px] font-semibold text-white/85 border border-white/10 active:scale-[0.98] leading-tight text-center">应用到全局</button>
+                                <button type="button" onclick="window.ocConfirmFilterEdit()" class="w-10 h-10 shrink-0 rounded-xl flex items-center justify-center text-white bg-white/[0.1] active:scale-95 transition" aria-label="完成" title="完成"><i class="fa-solid fa-check text-[18px]"></i></button>
                             </div>
                         </div>
                     </div>
@@ -5012,30 +5012,53 @@ document.addEventListener('click', function(e){
     var ocTextLayerIdSeq = 0;
     var OC_TEXT_LAYER_COLORS = ["#ffffff", "#FF5028", "#fbbf24", "#38bdf8", "#a78bfa"];
 
+    var OC_FILTER_CATEGORIES = [
+        { id: "none", label: "无滤镜" },
+        { id: "local", label: "本地" },
+        { id: "master", label: "大师" },
+        { id: "natural", label: "自然" },
+        { id: "travel", label: "旅行" },
+        { id: "portrait", label: "人像" }
+    ];
     var OC_FILTER_PRESETS = [
-        { id: "none", label: "原图", filter: "" },
-        { id: "vivid", label: "鲜明", filter: "saturate(1.28) contrast(1.1)" },
-        { id: "bw", label: "黑白", filter: "grayscale(1) contrast(1.05)" },
-        { id: "warm", label: "暖色", filter: "sepia(0.22) hue-rotate(-8deg) saturate(1.08)" },
-        { id: "cool", label: "冷色", filter: "hue-rotate(12deg) saturate(1.06) brightness(1.02)" },
-        { id: "film", label: "胶片", filter: "contrast(1.12) brightness(0.96) saturate(0.92) sepia(0.12)" },
-        { id: "sunset", label: "夕照", filter: "sepia(0.18) saturate(1.35) hue-rotate(-15deg)" },
-        { id: "forest", label: "森绿", filter: "hue-rotate(-18deg) saturate(1.15) contrast(1.06)" },
-        { id: "cyber", label: "赛博", filter: "saturate(1.45) contrast(1.15) hue-rotate(185deg)" },
-        { id: "soft", label: "柔和", filter: "brightness(1.06) contrast(0.92) saturate(0.88)" },
-        { id: "dramatic", label: "戏剧", filter: "contrast(1.28) brightness(0.94) saturate(1.05)" },
-        { id: "vintage", label: "复古", filter: "sepia(0.35) contrast(1.08) brightness(1.02)" }
+        { id: "none", label: "原图", filter: "", cat: "none" },
+        { id: "vivid", label: "鲜明", filter: "saturate(1.28) contrast(1.1)", cat: "master" },
+        { id: "bw", label: "黑白", filter: "grayscale(1) contrast(1.05)", cat: "portrait" },
+        { id: "warm", label: "暖色", filter: "sepia(0.22) hue-rotate(-8deg) saturate(1.08)", cat: "travel" },
+        { id: "cool", label: "冷色", filter: "hue-rotate(12deg) saturate(1.06) brightness(1.02)", cat: "travel" },
+        { id: "film", label: "胶片", filter: "contrast(1.12) brightness(0.96) saturate(0.92) sepia(0.12)", cat: "master" },
+        { id: "sunset", label: "夕照", filter: "sepia(0.18) saturate(1.35) hue-rotate(-15deg)", cat: "natural" },
+        { id: "forest", label: "森绿", filter: "hue-rotate(-18deg) saturate(1.15) contrast(1.06)", cat: "natural" },
+        { id: "cyber", label: "赛博", filter: "saturate(1.45) contrast(1.15) hue-rotate(185deg)", cat: "master" },
+        { id: "soft", label: "柔和", filter: "brightness(1.06) contrast(0.92) saturate(0.88)", cat: "natural" },
+        { id: "dramatic", label: "戏剧", filter: "contrast(1.28) brightness(0.94) saturate(1.05)", cat: "master" },
+        { id: "vintage", label: "复古", filter: "sepia(0.35) contrast(1.08) brightness(1.02)", cat: "portrait" }
+    ];
+    var OC_FILTER_ADJUST_PARAMS = [
+        { key: "exposure", label: "曝光", icon: "fa-sun" },
+        { key: "brightness", label: "亮度", icon: "fa-lightbulb" },
+        { key: "contrast", label: "对比度", icon: "fa-circle-half-stroke" },
+        { key: "highlights", label: "高光", icon: "fa-arrow-up" },
+        { key: "shadows", label: "阴影", icon: "fa-arrow-down" },
+        { key: "whites", label: "白色", icon: "fa-circle" },
+        { key: "saturation", label: "饱和度", icon: "fa-droplet" },
+        { key: "temperature", label: "色温", icon: "fa-sliders" },
+        { key: "tint", label: "色调", icon: "fa-palette" }
     ];
     var ocFilterBySegId = {};
     var ocFilterGlobal = null;
-    var ocFilterScope = "segment";
-    var ocFilterUiTab = "presets";
+    var ocFilterMainTab = "presets";
+    var ocFilterCategoryId = "master";
+    var ocFilterAdjustParamKey = "exposure";
 
     function ocDefaultFilterState() {
         return {
             presetId: "none",
             presetStrength: 100,
-            adjust: { exposure: 0, brightness: 0, contrast: 0, saturation: 0, temperature: 0, tint: 0 }
+            adjust: {
+                exposure: 0, brightness: 0, contrast: 0, saturation: 0, temperature: 0, tint: 0,
+                highlights: 0, shadows: 0, whites: 0
+            }
         };
     }
 
@@ -5054,18 +5077,26 @@ document.addEventListener('click', function(e){
         d.adjust.saturation = src.adjust ? src.adjust.saturation || 0 : 0;
         d.adjust.temperature = src.adjust ? src.adjust.temperature || 0 : 0;
         d.adjust.tint = src.adjust ? src.adjust.tint || 0 : 0;
+        d.adjust.highlights = src.adjust ? src.adjust.highlights || 0 : 0;
+        d.adjust.shadows = src.adjust ? src.adjust.shadows || 0 : 0;
+        d.adjust.whites = src.adjust ? src.adjust.whites || 0 : 0;
         return d;
     }
 
     function ocGetWritableFilterState() {
         ocEnsureFilterGlobal();
-        if (ocFilterScope === "all") return ocFilterGlobal;
         var seg = ocTimelineSelectedSeg;
         var segs = ocBuildEditSegments();
         if (!seg && segs.length) seg = segs[0];
         if (!seg) return ocFilterGlobal;
         if (!ocFilterBySegId[seg.id]) ocFilterBySegId[seg.id] = ocDefaultFilterState();
         return ocFilterBySegId[seg.id];
+    }
+
+    function ocFilterPresetsForCategory(catId) {
+        if (catId === "none") return OC_FILTER_PRESETS.filter(function (p) { return p.cat === "none"; });
+        if (catId === "local") return OC_FILTER_PRESETS.filter(function (p) { return p.id !== "none"; });
+        return OC_FILTER_PRESETS.filter(function (p) { return p.cat === catId; });
     }
 
     function ocFindFilterPreset(id) {
@@ -5111,9 +5142,12 @@ document.addEventListener('click', function(e){
         if (!adj) adj = ocDefaultFilterState().adjust;
         var exp = adj.exposure || 0;
         var br = adj.brightness || 0;
-        var b = 1 + exp * 0.006 + br * 0.005;
+        var hl = adj.highlights || 0;
+        var sh = adj.shadows || 0;
+        var wh = adj.whites || 0;
+        var b = 1 + exp * 0.006 + br * 0.005 + hl * 0.004 + wh * 0.005 + sh * 0.004;
         b = Math.max(0.2, Math.min(2.2, b));
-        var c = 1 + (adj.contrast || 0) * 0.008;
+        var c = 1 + (adj.contrast || 0) * 0.008 + hl * 0.002 - sh * 0.003;
         c = Math.max(0.3, Math.min(2.4, c));
         var sat = Math.max(0, 1 + (adj.saturation || 0) * 0.01);
         var hue = (adj.temperature || 0) * 0.35 + (adj.tint || 0) * 0.22;
@@ -5129,8 +5163,6 @@ document.addEventListener('click', function(e){
     }
 
     function ocPreviewFilterStateForImg() {
-        ocEnsureFilterGlobal();
-        if (ocEditToolId === "filter" && ocFilterScope === "all") return ocFilterGlobal;
         var seg = ocTimelineSelectedSeg;
         var segs = ocBuildEditSegments();
         if (!seg && segs.length) seg = segs[0];
@@ -5146,6 +5178,27 @@ document.addEventListener('click', function(e){
         img.style.filter = css || "none";
     };
 
+    window.ocRenderFilterCategoryStrip = function () {
+        var host = document.getElementById("ocEditFilterCategoryStrip");
+        if (!host) return;
+        host.innerHTML = "";
+        OC_FILTER_CATEGORIES.forEach(function (c) {
+            var b = document.createElement("button");
+            b.type = "button";
+            var on = c.id === ocFilterCategoryId;
+            b.className = "shrink-0 px-3 py-1 rounded-full text-[11px] font-bold whitespace-nowrap transition " + (on ? "bg-white/14 text-white" : "text-white/45");
+            b.textContent = c.label;
+            (function (cid) {
+                b.onclick = function () {
+                    ocFilterCategoryId = cid;
+                    window.ocRenderFilterCategoryStrip();
+                    window.ocRenderFilterPresetStrip();
+                };
+            })(c.id);
+            host.appendChild(b);
+        });
+    };
+
     window.ocRenderFilterPresetStrip = function () {
         var strip = document.getElementById("ocEditFilterPresetStrip");
         if (!strip) return;
@@ -5154,19 +5207,32 @@ document.addEventListener('click', function(e){
         var prevImg = document.getElementById("ocEditPreviewImg");
         var segsQuick = ocBuildEditSegments();
         var fallbackThumb = (ocTimelineSelectedSeg && ocTimelineSelectedSeg.thumb) || (segsQuick[0] && segsQuick[0].thumb) || (prevImg && prevImg.getAttribute("src")) || "";
-        OC_FILTER_PRESETS.forEach(function (p) {
+        var lut = document.createElement("button");
+        lut.type = "button";
+        lut.className = "shrink-0 flex flex-col items-center gap-1 w-[68px] active:scale-[0.98] transition";
+        lut.innerHTML = "<div class=\"w-[64px] h-[64px] rounded-xl border-2 border-dashed border-white/25 bg-white/[0.06] flex flex-col items-center justify-center gap-0.5\"><i class=\"fa-solid fa-plus text-lg text-white/50\"></i><span class=\"text-[8px] font-bold text-white/45\">LUT</span></div><span class=\"text-[9px] font-semibold text-white/45 text-center\">导入滤镜</span>";
+        lut.onclick = function () { alert("导入 LUT 文件（原型）"); };
+        strip.appendChild(lut);
+        var list = ocFilterPresetsForCategory(ocFilterCategoryId);
+        list.forEach(function (p) {
             var b = document.createElement("button");
             b.type = "button";
             b.className = "shrink-0 flex flex-col items-center gap-1 w-[68px] active:scale-[0.98] transition";
             var sel = state.presetId === p.id;
             var thumb = document.createElement("div");
-            thumb.className = "w-[64px] h-[64px] rounded-xl overflow-hidden border-2 bg-neutral-800 " + (sel ? "border-[#FF5028] ring-2 ring-[#FF5028]/30" : "border-white/15");
+            thumb.className = "relative w-[64px] h-[64px] rounded-xl overflow-hidden border-2 bg-neutral-800 " + (sel ? "border-[#FF5028] ring-2 ring-[#FF5028]/30" : "border-white/15");
             var im = document.createElement("img");
             im.src = fallbackThumb;
             im.className = "w-full h-full object-cover pointer-events-none";
             im.alt = "";
             im.style.filter = p.filter || "none";
             thumb.appendChild(im);
+            if (sel && p.id !== "none") {
+                var badge = document.createElement("span");
+                badge.className = "absolute bottom-1 right-1 min-w-[22px] px-1 py-0.5 rounded-md bg-black/75 text-[10px] font-bold text-[#FF5028] tabular-nums text-center";
+                badge.textContent = String(state.presetStrength);
+                thumb.appendChild(badge);
+            }
             var lab = document.createElement("span");
             lab.className = "text-[9px] font-semibold text-center leading-tight max-w-[68px] " + (sel ? "text-[#FF5028]" : "text-white/55");
             lab.textContent = p.label;
@@ -5193,90 +5259,125 @@ document.addEventListener('click', function(e){
         if (lb) lb.textContent = String(st.presetStrength);
     };
 
-    window.ocRenderFilterAdjustSliders = function () {
-        var host = document.getElementById("ocEditFilterAdjustSliders");
+    function ocAdjustInternalToUiPercent(internal) {
+        return Math.round((internal + 80) / 160 * 100);
+    }
+
+    function ocAdjustUiPercentToInternal(pct) {
+        return Math.round((pct / 100) * 160 - 80);
+    }
+
+    window.ocRenderFilterParamRow = function () {
+        var host = document.getElementById("ocEditFilterParamRow");
         if (!host) return;
         host.innerHTML = "";
         var st = ocGetWritableFilterState();
-        var defs = [
-            { key: "exposure", label: "曝光", min: -80, max: 80 },
-            { key: "brightness", label: "亮度", min: -80, max: 80 },
-            { key: "contrast", label: "对比度", min: -80, max: 80 },
-            { key: "saturation", label: "饱和度", min: -80, max: 80 },
-            { key: "temperature", label: "色温", min: -80, max: 80 },
-            { key: "tint", label: "色调", min: -80, max: 80 }
-        ];
-        defs.forEach(function (d) {
-            var row = document.createElement("div");
-            row.className = "flex flex-col gap-1";
-            var top = document.createElement("div");
-            top.className = "flex justify-between text-[10px] text-white/55";
-            top.innerHTML = "<span>" + d.label + "</span><span class=\"tabular-nums oc-filter-adj-val\" data-key=\"" + d.key + "\">" + (st.adjust[d.key] || 0) + "</span>";
-            var inp = document.createElement("input");
-            inp.type = "range";
-            inp.min = String(d.min);
-            inp.max = String(d.max);
-            inp.value = String(st.adjust[d.key] || 0);
-            inp.className = "w-full h-1 accent-[#FF5028] bg-white/10 rounded-full appearance-none cursor-pointer";
+        OC_FILTER_ADJUST_PARAMS.forEach(function (d) {
+            var b = document.createElement("button");
+            b.type = "button";
+            var on = ocFilterAdjustParamKey === d.key;
+            b.className = "shrink-0 flex flex-col items-center gap-1 min-w-[52px] px-1 py-1 rounded-xl transition " + (on ? "bg-white/12" : "opacity-80");
+            b.innerHTML = "<span class=\"w-9 h-9 rounded-full flex items-center justify-center text-white/85 text-[15px] border " + (on ? "border-[#FF5028]/60 bg-[#FF5028]/15" : "border-white/15 bg-white/[0.06]") + "\"><i class=\"fa-solid " + d.icon + "\"></i></span><span class=\"text-[9px] font-semibold " + (on ? "text-[#FF5028]" : "text-white/55") + "\">" + d.label + "</span>";
             (function (key) {
-                inp.addEventListener("input", function () {
-                    var s = ocGetWritableFilterState();
-                    s.adjust[key] = parseInt(inp.value, 10) || 0;
-                    var vEl = host.querySelector(".oc-filter-adj-val[data-key=\"" + key + "\"]");
-                    if (vEl) vEl.textContent = String(s.adjust[key]);
-                    window.ocApplyPreviewFilterStyle();
-                });
+                b.onclick = function () {
+                    ocFilterAdjustParamKey = key;
+                    window.ocRenderFilterParamRow();
+                    window.ocSyncAdjustMasterSlider();
+                };
             })(d.key);
-            row.appendChild(top);
-            row.appendChild(inp);
-            host.appendChild(row);
+            host.appendChild(b);
         });
     };
 
-    window.ocSetFilterUiTab = function (tab) {
-        ocFilterUiTab = tab === "adjust" ? "adjust" : "presets";
-        var ph = document.getElementById("ocEditFilterPresetsHost");
-        var ah = document.getElementById("ocEditFilterAdjustHost");
-        var sr = document.getElementById("ocEditFilterStrengthRow");
-        var tp = document.getElementById("ocFilterTabPresets");
-        var ta = document.getElementById("ocFilterTabAdjust");
-        if (ph) ph.classList.toggle("hidden", ocFilterUiTab !== "presets");
-        if (ah) ah.classList.toggle("hidden", ocFilterUiTab !== "adjust");
-        if (sr) sr.classList.toggle("hidden", ocFilterUiTab !== "presets");
-        var active = "shrink-0 px-4 py-2 rounded-xl text-[11px] font-bold border border-[#FF5028] bg-[#FF5028]/20 text-white";
-        var idle = "shrink-0 px-4 py-2 rounded-xl text-[11px] font-bold border border-white/15 bg-white/[0.06] text-white/70";
-        if (tp) tp.className = ocFilterUiTab === "presets" ? active : idle;
-        if (ta) ta.className = ocFilterUiTab === "adjust" ? active : idle;
-        if (ocFilterUiTab === "adjust") window.ocRenderFilterAdjustSliders();
-        else window.ocRenderFilterPresetStrip();
-        window.ocSyncFilterStrengthSlider();
+    window.ocSyncAdjustMasterSlider = function () {
+        var sl = document.getElementById("ocFilterAdjustMasterSlider");
+        var vl = document.getElementById("ocFilterAdjustValueLabel");
+        var st = ocGetWritableFilterState();
+        var key = ocFilterAdjustParamKey;
+        var internal = st.adjust[key] || 0;
+        var pct = ocAdjustInternalToUiPercent(internal);
+        if (sl) sl.value = String(Math.max(0, Math.min(100, pct)));
+        if (vl) vl.textContent = String(Math.max(0, Math.min(100, pct)));
     };
 
-    window.ocSetFilterScope = function (scope) {
-        ocFilterScope = scope === "all" ? "all" : "segment";
-        var bs = document.getElementById("ocFilterScopeSeg");
-        var ba = document.getElementById("ocFilterScopeAll");
-        var on = "shrink-0 px-3 py-1.5 rounded-lg text-[10px] font-semibold border border-[#FF5028] bg-[#FF5028]/15 text-white";
-        var off = "shrink-0 px-3 py-1.5 rounded-lg text-[10px] font-semibold border border-white/15 bg-white/[0.06] text-white/75";
-        if (bs) bs.className = ocFilterScope === "segment" ? on : off;
-        if (ba) ba.className = ocFilterScope === "all" ? on : off;
-        window.ocSetFilterUiTab(ocFilterUiTab);
+    window.ocSetFilterMainTab = function (tab) {
+        ocFilterMainTab = tab === "adjust" ? "adjust" : tab === "restore" ? "restore" : tab === "underwater" ? "underwater" : "presets";
+        var presetsPanel = document.getElementById("ocEditFilterPresetsPanel");
+        var adjustPanel = document.getElementById("ocEditFilterAdjustPanel");
+        var extraPanel = document.getElementById("ocEditFilterExtraPanel");
+        var extraText = document.getElementById("ocEditFilterExtraText");
+        var strengthRow = document.getElementById("ocEditFilterStrengthRow");
+        var adjSliderRow = document.getElementById("ocEditFilterAdjustSliderRow");
+        var tp = document.getElementById("ocFilterMainTabPresets");
+        var ta = document.getElementById("ocFilterMainTabAdjust");
+        var tr = document.getElementById("ocFilterMainTabRestore");
+        var tw = document.getElementById("ocFilterMainTabUnderwater");
+        var trWrap = document.getElementById("ocFilterMainTabRestoreWrap");
+        var pillOn = "rounded-full text-[11px] font-bold whitespace-nowrap bg-white/12 text-white";
+        var pillOff = "rounded-full text-[11px] font-bold whitespace-nowrap text-white/55";
+        if (tp) tp.className = "shrink-0 px-3 py-1.5 transition " + (ocFilterMainTab === "presets" ? pillOn : pillOff);
+        if (ta) ta.className = "shrink-0 px-3 py-1.5 transition " + (ocFilterMainTab === "adjust" ? pillOn : pillOff);
+        if (tw) tw.className = "shrink-0 px-3 py-1.5 transition " + (ocFilterMainTab === "underwater" ? pillOn : pillOff);
+        if (trWrap) trWrap.className = "shrink-0 inline-flex items-center gap-0.5 rounded-full pl-2 pr-1 py-0.5 transition " + (ocFilterMainTab === "restore" ? "bg-white/12" : "");
+        if (tr) tr.className = "px-2 py-1 transition " + (ocFilterMainTab === "restore" ? pillOn : pillOff);
+        var showPresets = ocFilterMainTab === "presets";
+        var showAdjust = ocFilterMainTab === "adjust";
+        var showExtra = ocFilterMainTab === "restore" || ocFilterMainTab === "underwater";
+        if (presetsPanel) presetsPanel.classList.toggle("hidden", !showPresets);
+        if (adjustPanel) adjustPanel.classList.toggle("hidden", !showAdjust);
+        if (extraPanel) extraPanel.classList.toggle("hidden", !showExtra);
+        if (strengthRow) strengthRow.classList.toggle("hidden", !showPresets);
+        if (adjSliderRow) {
+            adjSliderRow.classList.toggle("hidden", !showAdjust);
+            adjSliderRow.classList.toggle("flex", showAdjust);
+        }
+        if (showExtra && extraText) {
+            if (ocFilterMainTab === "restore") {
+                extraText.textContent = "色彩还原可自动修正色偏与白平衡（即将上线，当前为原型说明）。";
+            } else {
+                extraText.textContent = "水下增强针对潜水/泳池画面提升色彩与清晰度（即将上线）。";
+            }
+        }
+        if (showPresets) {
+            window.ocRenderFilterCategoryStrip();
+            window.ocRenderFilterPresetStrip();
+            window.ocSyncFilterStrengthSlider();
+        }
+        if (showAdjust) {
+            window.ocRenderFilterParamRow();
+            window.ocSyncAdjustMasterSlider();
+        }
         window.ocApplyPreviewFilterStyle();
     };
 
     window.ocResetFilterState = function () {
         var fresh = ocDefaultFilterState();
-        if (ocFilterScope === "all") {
-            ocFilterGlobal = fresh;
-            window.ocResetAllSegmentFilters();
-        } else {
-            var seg = ocTimelineSelectedSeg;
-            var segs = ocBuildEditSegments();
-            if (!seg && segs.length) seg = segs[0];
-            if (seg) ocFilterBySegId[seg.id] = ocCloneFilterState(fresh);
+        var seg = ocTimelineSelectedSeg;
+        var segs = ocBuildEditSegments();
+        if (!seg && segs.length) seg = segs[0];
+        if (seg) ocFilterBySegId[seg.id] = ocCloneFilterState(fresh);
+        ocFilterGlobal = ocCloneFilterState(fresh);
+        if (ocFilterMainTab === "presets") {
+            window.ocRenderFilterCategoryStrip();
+            window.ocRenderFilterPresetStrip();
+            window.ocSyncFilterStrengthSlider();
+        } else if (ocFilterMainTab === "adjust") {
+            window.ocRenderFilterParamRow();
+            window.ocSyncAdjustMasterSlider();
         }
-        window.ocSetFilterUiTab(ocFilterUiTab);
         window.ocApplyPreviewFilterStyle();
+    };
+
+    window.ocApplyFilterToAllSegments = function () {
+        var st = ocCloneFilterState(ocGetWritableFilterState());
+        var segs = ocBuildEditSegments();
+        segs.forEach(function (s) {
+            ocFilterBySegId[s.id] = ocCloneFilterState(st);
+        });
+        ocFilterGlobal = ocCloneFilterState(st);
+        window.ocApplyPreviewFilterStyle();
+        if (ocFilterMainTab === "presets") window.ocRenderFilterPresetStrip();
+        else if (ocFilterMainTab === "adjust") window.ocSyncAdjustMasterSlider();
     };
 
     window.ocResetAllSegmentFilters = function () {
@@ -5326,6 +5427,22 @@ document.addEventListener('click', function(e){
             s.presetStrength = parseInt(sl.value, 10) || 0;
             var lb = document.getElementById("ocFilterStrengthLabel");
             if (lb) lb.textContent = String(s.presetStrength);
+            window.ocRenderFilterPresetStrip();
+            window.ocApplyPreviewFilterStyle();
+        });
+    }
+
+    function ocBindFilterAdjustMasterSliderOnce() {
+        var sl = document.getElementById("ocFilterAdjustMasterSlider");
+        if (!sl || sl.dataset.ocBound) return;
+        sl.dataset.ocBound = "1";
+        sl.addEventListener("input", function () {
+            var pct = parseInt(sl.value, 10);
+            if (isNaN(pct)) pct = 50;
+            var s = ocGetWritableFilterState();
+            s.adjust[ocFilterAdjustParamKey] = ocAdjustUiPercentToInternal(pct);
+            var vl = document.getElementById("ocFilterAdjustValueLabel");
+            if (vl) vl.textContent = String(Math.max(0, Math.min(100, pct)));
             window.ocApplyPreviewFilterStyle();
         });
     }
@@ -6239,9 +6356,14 @@ document.addEventListener('click', function(e){
         });
         if (typeof window.ocApplyPreviewFilterStyle === "function") window.ocApplyPreviewFilterStyle();
         if (ocEditToolId === "filter") {
-            if (ocFilterUiTab === "presets") window.ocRenderFilterPresetStrip();
-            else window.ocRenderFilterAdjustSliders();
-            window.ocSyncFilterStrengthSlider();
+            if (ocFilterMainTab === "presets") {
+                window.ocRenderFilterCategoryStrip();
+                window.ocRenderFilterPresetStrip();
+                window.ocSyncFilterStrengthSlider();
+            } else if (ocFilterMainTab === "adjust") {
+                window.ocRenderFilterParamRow();
+                window.ocSyncAdjustMasterSlider();
+            }
         }
     }
 
@@ -6278,7 +6400,6 @@ document.addEventListener('click', function(e){
         var clipChrome = document.getElementById("ocEditClipChrome");
         var musicChrome = document.getElementById("ocEditMusicChrome");
         var textChrome = document.getElementById("ocEditTextChrome");
-        var filterChrome = document.getElementById("ocEditFilterChrome");
         var tplPanel = document.getElementById("ocEditTemplatePanel");
         var musPanel = document.getElementById("ocEditSubPanelMusic");
         var mainBar = document.getElementById("ocEditMainBottomBar");
@@ -6286,7 +6407,6 @@ document.addEventListener('click', function(e){
         var musicBar = document.getElementById("ocEditMusicBottomBar");
         var textBar = document.getElementById("ocEditTextBottomBar");
         var filterBar = document.getElementById("ocEditFilterBottomBar");
-        if (filterChrome) filterChrome.classList.add("hidden");
         if (filterBar) filterBar.classList.add("hidden");
         if (tool === "edit") {
             if (tplChrome) tplChrome.classList.remove("hidden");
@@ -6331,7 +6451,6 @@ document.addEventListener('click', function(e){
             if (clipChrome) clipChrome.classList.add("hidden");
             if (musicChrome) musicChrome.classList.add("hidden");
             if (textChrome) textChrome.classList.add("hidden");
-            if (filterChrome) filterChrome.classList.remove("hidden");
             if (tplPanel) tplPanel.classList.add("hidden");
             if (musPanel) musPanel.classList.add("hidden");
             if (mainBar) mainBar.classList.add("hidden");
@@ -6347,7 +6466,8 @@ document.addEventListener('click', function(e){
             if (pickSeg) ocSelectTimelineSegment(pickSeg);
             else window.ocApplyPreviewFilterStyle();
             ocBindFilterStrengthSliderOnce();
-            window.ocSetFilterScope(ocFilterScope);
+            ocBindFilterAdjustMasterSliderOnce();
+            window.ocSetFilterMainTab(ocFilterMainTab);
         } else {
             if (tplChrome) tplChrome.classList.remove("hidden");
             if (clipChrome) clipChrome.classList.add("hidden");
@@ -6390,8 +6510,9 @@ document.addEventListener('click', function(e){
         ocTextLayerIdSeq = 0;
         ocFilterBySegId = {};
         ocFilterGlobal = null;
-        ocFilterScope = "segment";
-        ocFilterUiTab = "presets";
+        ocFilterMainTab = "presets";
+        ocFilterCategoryId = "master";
+        ocFilterAdjustParamKey = "exposure";
         ocEnsureTemplateInFilter();
         window.ocRenderHighlightCategoryTabs();
         window.ocRenderEditTemplateStrip();
