@@ -2207,11 +2207,6 @@
                             <div class="flex gap-1.5 overflow-x-auto no-scrollbar px-2 py-2 border-b border-white/[0.06] shrink-0 bg-[#161616]">
                                 <button type="button" id="ocFilterMainTabPresets" onclick="window.ocSetFilterMainTab('presets')" class="shrink-0 px-3 py-1.5 rounded-full text-[11px] font-bold whitespace-nowrap transition bg-white/12 text-white">滤镜</button>
                                 <button type="button" id="ocFilterMainTabAdjust" onclick="window.ocSetFilterMainTab('adjust')" class="shrink-0 px-3 py-1.5 rounded-full text-[11px] font-bold whitespace-nowrap transition text-white/55">调色</button>
-                                <div class="shrink-0 inline-flex items-center gap-0.5 rounded-full pl-2 pr-1 py-0.5" id="ocFilterMainTabRestoreWrap">
-                                    <button type="button" id="ocFilterMainTabRestore" onclick="window.ocSetFilterMainTab('restore')" class="px-2 py-1 rounded-full text-[11px] font-bold whitespace-nowrap transition text-white/55">色彩还原</button>
-                                    <button type="button" onclick="alert('色彩还原：一键修正偏色（原型说明）');" class="w-7 h-7 shrink-0 rounded-full flex items-center justify-center text-white/40 hover:text-white/70 active:bg-white/10" title="说明" aria-label="色彩还原说明"><i class="fa-regular fa-circle-question text-[10px]"></i></button>
-                                </div>
-                                <button type="button" id="ocFilterMainTabUnderwater" onclick="window.ocSetFilterMainTab('underwater')" class="shrink-0 px-3 py-1.5 rounded-full text-[11px] font-bold whitespace-nowrap transition text-white/55">水下增强</button>
                             </div>
                             <div id="ocEditFilterTimelineArea" class="flex flex-col shrink-0 py-1.5 px-2 border-b border-white/[0.06] bg-[#161616]">
                                 <div id="ocEditFilterTimelineRuler" class="h-4 shrink-0 flex flex-row items-end justify-between gap-1 overflow-hidden border-b border-white/[0.04] mb-1 w-full"></div>
@@ -2228,10 +2223,6 @@
                             </div>
                             <div id="ocEditFilterAdjustPanel" class="hidden flex-1 min-h-0 flex flex-col overflow-hidden px-2 pt-2 pb-1 shrink-0">
                                 <div id="ocEditFilterParamRow" class="flex gap-1 overflow-x-auto no-scrollbar pb-2 shrink-0"></div>
-                            </div>
-                            <div id="ocEditFilterExtraPanel" class="hidden flex-1 min-h-0 flex flex-col items-center justify-center px-4 py-5 shrink-0">
-                                <p id="ocEditFilterExtraText" class="text-[12px] text-white/50 text-center leading-relaxed"></p>
-                                <button type="button" id="ocEditFilterExtraBtn" onclick="alert('功能即将上线（原型）')" class="hidden mt-3 px-4 py-2 rounded-full bg-white/10 text-[11px] font-semibold text-white/80">了解更多</button>
                             </div>
                             <div id="ocEditFilterStrengthRow" class="flex items-center gap-3 px-3 py-2 border-t border-white/[0.06] shrink-0 bg-[#161616]">
                                 <span class="text-[10px] text-white/45 w-9 shrink-0">强度</span>
@@ -5301,42 +5292,25 @@ document.addEventListener('click', function(e){
     };
 
     window.ocSetFilterMainTab = function (tab) {
-        ocFilterMainTab = tab === "adjust" ? "adjust" : tab === "restore" ? "restore" : tab === "underwater" ? "underwater" : "presets";
+        ocFilterMainTab = tab === "adjust" ? "adjust" : "presets";
         var presetsPanel = document.getElementById("ocEditFilterPresetsPanel");
         var adjustPanel = document.getElementById("ocEditFilterAdjustPanel");
-        var extraPanel = document.getElementById("ocEditFilterExtraPanel");
-        var extraText = document.getElementById("ocEditFilterExtraText");
         var strengthRow = document.getElementById("ocEditFilterStrengthRow");
         var adjSliderRow = document.getElementById("ocEditFilterAdjustSliderRow");
         var tp = document.getElementById("ocFilterMainTabPresets");
         var ta = document.getElementById("ocFilterMainTabAdjust");
-        var tr = document.getElementById("ocFilterMainTabRestore");
-        var tw = document.getElementById("ocFilterMainTabUnderwater");
-        var trWrap = document.getElementById("ocFilterMainTabRestoreWrap");
         var pillOn = "rounded-full text-[11px] font-bold whitespace-nowrap bg-white/12 text-white";
         var pillOff = "rounded-full text-[11px] font-bold whitespace-nowrap text-white/55";
         if (tp) tp.className = "shrink-0 px-3 py-1.5 transition " + (ocFilterMainTab === "presets" ? pillOn : pillOff);
         if (ta) ta.className = "shrink-0 px-3 py-1.5 transition " + (ocFilterMainTab === "adjust" ? pillOn : pillOff);
-        if (tw) tw.className = "shrink-0 px-3 py-1.5 transition " + (ocFilterMainTab === "underwater" ? pillOn : pillOff);
-        if (trWrap) trWrap.className = "shrink-0 inline-flex items-center gap-0.5 rounded-full pl-2 pr-1 py-0.5 transition " + (ocFilterMainTab === "restore" ? "bg-white/12" : "");
-        if (tr) tr.className = "px-2 py-1 transition " + (ocFilterMainTab === "restore" ? pillOn : pillOff);
         var showPresets = ocFilterMainTab === "presets";
         var showAdjust = ocFilterMainTab === "adjust";
-        var showExtra = ocFilterMainTab === "restore" || ocFilterMainTab === "underwater";
         if (presetsPanel) presetsPanel.classList.toggle("hidden", !showPresets);
         if (adjustPanel) adjustPanel.classList.toggle("hidden", !showAdjust);
-        if (extraPanel) extraPanel.classList.toggle("hidden", !showExtra);
         if (strengthRow) strengthRow.classList.toggle("hidden", !showPresets);
         if (adjSliderRow) {
             adjSliderRow.classList.toggle("hidden", !showAdjust);
             adjSliderRow.classList.toggle("flex", showAdjust);
-        }
-        if (showExtra && extraText) {
-            if (ocFilterMainTab === "restore") {
-                extraText.textContent = "色彩还原可自动修正色偏与白平衡（即将上线，当前为原型说明）。";
-            } else {
-                extraText.textContent = "水下增强针对潜水/泳池画面提升色彩与清晰度（即将上线）。";
-            }
         }
         if (showPresets) {
             window.ocRenderFilterCategoryStrip();
