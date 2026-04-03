@@ -5511,6 +5511,10 @@ document.addEventListener('click', function(e){
             if (ci < 0) ci = 0;
             layer.colorIdx = (ci + 1) % OC_TEXT_LAYER_COLORS.length;
             layer.color = OC_TEXT_LAYER_COLORS[layer.colorIdx];
+        } else if (act === "del") {
+            ocTextLayers = ocTextLayers.filter(function (x) { return x.id !== layer.id; });
+            window.ocSelectTextLayer(null);
+            return;
         }
         window.ocRenderTextPreviewOverlays();
         window.ocRenderTextTimelineTrack();
@@ -5526,7 +5530,8 @@ document.addEventListener('click', function(e){
             { act: "style", icon: "fa-wand-magic-sparkles", label: "样式" },
             { act: "smaller", icon: "fa-minus", label: "缩小" },
             { act: "bigger", icon: "fa-plus", label: "放大" },
-            { act: "color", icon: "fa-droplet", label: "颜色" }
+            { act: "color", icon: "fa-droplet", label: "颜色" },
+            { act: "del", icon: "fa-trash", label: "删除" }
         ];
         defs.forEach(function (t) {
             var b = document.createElement("button");
